@@ -8,6 +8,10 @@ RUN mvn dependency:go-offline
 
 COPY src ./src
 
+RUN echo "=== JAVA VERSION ===" && java -version
+RUN echo "=== MAVEN VERSION ===" && mvn -version
+RUN echo "=== POM JAVA VERSION ===" && grep -n "java.version" pom.xml
+
 RUN mvn clean package -DskipTests -Dmaven.compiler.release=21
 
 EXPOSE 8080
