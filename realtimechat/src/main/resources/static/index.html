@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AmicoNet</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-box">
+
+            <h1>AmicoNet</h1>
+
+            <p>Log in to your account</p>
+
+            <form id="loginForm">
+
+                <input
+                    type="text"
+                    id="loginUsername"
+                    placeholder="Username"
+                    required
+                    autocomplete="username"
+                >
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Password"
+                    required
+                    autocomplete="current-password"
+                >
+
+                <button type="submit">
+                    Log In
+                </button>
+
+            </form>
+
+            <p id="loginMessage"></p>
+
+            <div class="login-link">
+
+                Don't have an account?
+
+                <a href="signup.html">
+                    Create account
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

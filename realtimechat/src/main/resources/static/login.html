@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AmicoNet - Login</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        /* =========================
+           LEFT SIDE
+        ========================== */
+
+        .welcome-section {
+            width: 50%;
+            background: #1877f2;
+            color: white;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .welcome-section h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            font-size: 17px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        .features {
+            margin-top: 35px;
+        }
+
+        .feature {
+            margin-bottom: 18px;
+            font-size: 16px;
+        }
+
+        /* =========================
+           RIGHT SIDE
+        ========================== */
+
+        .login-section {
+            width: 50%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-section h1 {
+            font-size: 32px;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 10px;
+            background: #1877f2;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-button:hover {
+            background: #0d65d9;
+        }
+
+        .login-button:disabled {
+            background: #9bbff0;
+            cursor: not-allowed;
+        }
+
+        #loginMessage {
+            margin-top: 15px;
+            text-align: center;
+            min-height: 20px;
+            font-size: 14px;
+        }
+
+        .signup-text {
+            text-align: center;
+            margin-top: 25px;
+            color: #777;
+        }
+
+        .signup-text a {
+            color: #1877f2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 750px) {
+
+            .container {
+                width: 95%;
+                min-height: auto;
+                flex-direction: column;
+            }
+
+            .welcome-section,
+            .login-section {
+                width: 100%;
+            }
+
+            .welcome-section {
+                padding: 40px;
+            }
+
+            .login-section {
+                padding: 40px;
+            }
+
+            .welcome-section h2 {
+                font-size: 26px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =========================
+         WELCOME SECTION
+    ========================== -->
+
+    <div class="welcome-section">
+
+        <div class="logo">
+            AmicoNet
+        </div>
+
+        <h2>
+            Connect with your friends.
+        </h2>
+
+        <p>
+            Welcome to AmicoNet, a simple real-time
+            communication platform where you can
+            connect and chat with people.
+        </p>
+
+
+        <div class="features">
+
+            <div class="feature">
+                💬 Real-time messaging
+            </div>
+
+            <div class="feature">
+                🟢 See who's online
+            </div>
+
+            <div class="feature">
+                👤 Personal profiles
+            </div>
+
+            <div class="feature">
+                ⚡ Fast communication
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         LOGIN SECTION
+    ========================== -->
+
+    <div class="login-section">
+
+        <h1>
+            Welcome back
+        </h1>
+
+        <p class="subtitle">
+            Log in to your AmicoNet account.
+        </p>
+
+
+        <form id="loginForm">
+
+
+            <!-- USERNAME -->
+
+            <div class="input-group">
+
+                <label for="loginUsername">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="loginUsername"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="input-group">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                class="login-button"
+                id="loginButton">
+
+                Log In
+
+            </button>
+
+
+            <!-- MESSAGE -->
+
+            <div id="loginMessage"></div>
+
+
+        </form>
+
+
+        <!-- SIGN UP -->
+
+        <div class="signup-text">
+
+            Don't have an account?
+
+            <a href="/signup.html">
+                Create one
+            </a>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const loginMessage =
+        document.getElementById("loginMessage");
+
+
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const username =
+                document.getElementById(
+                    "loginUsername"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "loginPassword"
+                ).value;
+
+
+            if (!username || !password) {
+
+                loginMessage.textContent =
+                    "Please enter username and password.";
+
+                loginMessage.style.color =
+                    "#e53935";
+
+                return;
+            }
+
+
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "Logging in...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/auth/login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                username: username,
+                                password: password
+                            })
+                        }
+                    );
+
+
+                const result =
+                    await response.text();
+
+
+                if (response.ok) {
+
+                    loginMessage.textContent =
+                        "Login successful!";
+
+                    loginMessage.style.color =
+                        "#31a24c";
+
+
+                    localStorage.setItem(
+                        "username",
+                        username
+                    );
+
+
+                    setTimeout(function() {
+
+                        window.location.href =
+                            "/chat.html";
+
+                    }, 500);
+
+
+                } else {
+
+                    loginMessage.textContent =
+                        result ||
+                        "Invalid username or password.";
+
+                    loginMessage.style.color =
+                        "#e53935";
+
+                    loginButton.disabled =
+                        false;
+
+                    loginButton.textContent =
+                        "Log In";
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+
+                loginMessage.textContent =
+                    "Could not connect to server.";
+
+                loginMessage.style.color =
+                    "#e53935";
+
+
+                loginButton.disabled =
+                    false;
+
+                loginButton.textContent =
+                    "Log In";
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

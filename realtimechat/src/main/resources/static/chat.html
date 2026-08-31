@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AmicoNet</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="chat-app">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <div class="sidebar">
+
+
+        <div class="sidebar-header">
+
+            <h1>AmicoNet</h1>
+
+
+            <!-- MY PROFILE -->
+
+            <div class="profile-section">
+
+                <img
+                    id="profilePhoto"
+                    src=""
+                    alt="Profile"
+                    class="profile-photo"
+                    style="display:none;"
+                >
+
+
+                <input
+                    type="file"
+                    id="profilePhotoInput"
+                    accept="image/*"
+                    hidden
+                >
+
+
+                <button
+                    id="profilePhotoButton"
+                    type="button"
+                    class="profile-btn">
+
+                    👤
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             SEARCH
+        ========================== -->
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search chats..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+
+        <!-- =========================
+             USER LIST
+        ========================== -->
+
+        <div
+            class="chat-list"
+            id="chatList">
+
+        </div>
+
+
+
+        <!-- =========================
+             ADD PERSON
+        ========================== -->
+
+        <button
+            class="add-user-btn"
+            id="addUserButton"
+            type="button">
+
+            + Add Person
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================
+         CHAT AREA
+    ========================== -->
+
+    <div class="chat-area">
+
+
+
+        <!-- =========================
+             CHAT HEADER
+        ========================== -->
+
+        <div class="chat-header">
+
+
+            <div class="chat-avatar-container">
+
+
+                <img
+                    id="chatProfilePhoto"
+                    class="chat-profile-photo"
+                    src=""
+                    alt="Profile"
+                    style="display:none;"
+                >
+
+
+                <div
+                    class="avatar"
+                    id="chatAvatar">
+
+                    ?
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- NAME + STATUS -->
+
+            <div class="chat-header-info">
+
+
+                <h2 id="chatName">
+
+                    Select a person
+
+                </h2>
+
+
+                <span
+                    class="online-status"
+                    id="onlineStatus">
+
+                    ● Offline
+
+                </span>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             MESSAGES
+        ========================== -->
+
+        <div
+            class="messages"
+            id="messages">
+
+
+            <div class="message received">
+
+                Select a person to start chatting.
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             MESSAGE INPUT
+        ========================== -->
+
+        <div class="message-input">
+
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Type a message..."
+                autocomplete="off"
+                disabled
+            >
+
+
+            <button
+                id="sendButton"
+                type="button"
+                disabled>
+
+                ➤
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     SOCKJS
+========================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js">
+</script>
+
+
+
+<!-- =========================
+     STOMP
+========================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.2.1/bundles/stomp.umd.min.js">
+</script>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script src="js/app.js"></script>
+
+
+</body>
+
+</html>
