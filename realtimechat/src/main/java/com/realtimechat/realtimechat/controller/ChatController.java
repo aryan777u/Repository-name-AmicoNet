@@ -2,6 +2,7 @@ package com.realtimechat.realtimechat.controller;
 
 import com.realtimechat.realtimechat.model.Message;
 import com.realtimechat.realtimechat.repository.MessageRepository;
+
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,12 @@ public class ChatController {
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
     public Message sendMessage(Message message) {
+
+        if (message.getTimestamp() == null) {
+            message.setTimestamp(
+                    java.time.LocalDateTime.now()
+            );
+        }
 
         return messageRepository.save(message);
     }
