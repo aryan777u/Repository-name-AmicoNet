@@ -1,394 +1,388 @@
-```javascript
 // ======================================================
-// SIGN UP
+// AMICONET - APP.JS
 // ======================================================
 
-const signupForm = document.getElementById("signupForm");
+document.addEventListener("DOMContentLoaded", function () {
 
-if (signupForm) {
-    signupForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
+    // ==================================================
+    // ELEMENTS
+    // ==================================================
 
-        const username = document.getElementById("username").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const message = document.getElementById("message");
+    const signupForm = document.getElementById("signupForm");
+    const loginForm = document.getElementById("loginForm");
 
-        try {
-            const response = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password
-                })
-            });
+    const chatList = document.getElementById("chatList");
+    const searchInput = document.getElementById("searchInput");
+    const addUserButton = document.getElementById("addUserButton");
 
-            const result = await response.text();
+    const sendButton = document.getElementById("sendButton");
+    const messageInput = document.getElementById("messageInput");
+    const messagesContainer = document.getElementById("messages");
 
-            if (response.ok) {
-                message.textContent = "Account created successfully!";
-                message.style.color = "#31a24c";
-                signupForm.reset();
-            } else {
-                message.textContent = result;
-                message.style.color = "#ff4d4d";
+    const chatName = document.getElementById("chatName");
+    const chatAvatar = document.getElementById("chatAvatar");
+    const onlineStatus = document.getElementById("onlineStatus");
+
+    const profilePhotoButton =
+        document.getElementById("profilePhotoButton");
+
+    const profilePhotoInput =
+        document.getElementById("profilePhotoInput");
+
+    const profilePhoto =
+        document.getElementById("profilePhoto");
+
+
+    // ==================================================
+    // SIGN UP
+    // ==================================================
+
+    if (signupForm) {
+
+        signupForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            const username =
+                document.getElementById("username").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            const message =
+                document.getElementById("message");
+
+
+            try {
+
+                const response =
+                    await fetch("/api/auth/signup", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            email: email,
+                            password: password
+                        })
+                    });
+
+
+                const result =
+                    await response.text();
+
+
+                if (response.ok) {
+
+                    message.textContent =
+                        "Account created successfully!";
+
+                    message.style.color =
+                        "#31a24c";
+
+                    signupForm.reset();
+
+                } else {
+
+                    message.textContent =
+                        result;
+
+                    message.style.color =
+                        "#ff4d4d";
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    "Could not connect to server.";
+
+                message.style.color =
+                    "#ff4d4d";
             }
-        } catch (error) {
-            console.error(error);
-            message.textContent = "Could not connect to server.";
-            message.style.color = "#ff4d4d";
-        }
-    });
-}
+
+        });
+    }
 
 
-// ======================================================
-// LOGIN
-// ======================================================
+    // ==================================================
+    // LOGIN
+    // ==================================================
 
-const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
 
-if (loginForm) {
-    loginForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
+        loginForm.addEventListener("submit", async function (event) {
 
-        const username =
-            document.getElementById("loginUsername").value.trim();
+            event.preventDefault();
 
-        const password =
-            document.getElementById("loginPassword").value;
+            const username =
+                document.getElementById("loginUsername")
+                    .value
+                    .trim();
 
-        const message =
-            document.getElementById("loginMessage");
+            const password =
+                document.getElementById("loginPassword")
+                    .value;
 
-        try {
-            const response = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username,
-                    password
-                })
-            });
+            const message =
+                document.getElementById("loginMessage");
 
-            const result = await response.text();
 
-            if (response.ok) {
-                message.textContent = "Login successful!";
-                message.style.color = "#31a24c";
+            try {
 
-                localStorage.setItem("username", username);
+                const response =
+                    await fetch("/api/auth/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    });
 
-                setTimeout(function () {
-                    window.location.href = "/chat.html";
-                }, 500);
-            } else {
-                message.textContent = result;
-                message.style.color = "#ff4d4d";
+
+                const result =
+                    await response.text();
+
+
+                if (response.ok) {
+
+                    message.textContent =
+                        "Login successful!";
+
+                    message.style.color =
+                        "#31a24c";
+
+
+                    localStorage.setItem(
+                        "username",
+                        username
+                    );
+
+
+                    setTimeout(function () {
+
+                        window.location.href =
+                            "/chat.html";
+
+                    }, 500);
+
+
+                } else {
+
+                    message.textContent =
+                        result;
+
+                    message.style.color =
+                        "#ff4d4d";
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    "Could not connect to server.";
+
+                message.style.color =
+                    "#ff4d4d";
             }
-        } catch (error) {
-            console.error(error);
-            message.textContent = "Could not connect to server.";
-            message.style.color = "#ff4d4d";
-        }
-    });
-}
+
+        });
+    }
 
 
-// ======================================================
-// CHAT ELEMENTS
-// ======================================================
+    // ==================================================
+    // CHAT PAGE CHECK
+    // ==================================================
 
-const sendButton = document.getElementById("sendButton");
-const messageInput = document.getElementById("messageInput");
-const messagesContainer = document.getElementById("messages");
-const chatList = document.getElementById("chatList");
-const searchInput = document.getElementById("searchInput");
-const chatName = document.getElementById("chatName");
-const chatAvatar = document.getElementById("chatAvatar");
-const onlineStatus = document.getElementById("onlineStatus");
+    if (
+        !chatList ||
+        !messageInput ||
+        !sendButton ||
+        !messagesContainer
+    ) {
+        return;
+    }
 
 
-// ======================================================
-// CHAT SYSTEM
-// ======================================================
-
-if (
-    sendButton &&
-    messageInput &&
-    messagesContainer &&
-    chatList
-) {
-
-    console.log("Chat JavaScript loaded!");
+    // ==================================================
+    // CURRENT USER
+    // ==================================================
 
     const currentUser =
-        localStorage.getItem("username") || "anonymous";
+        localStorage.getItem("username");
 
-    let receiver = null;
+
+    if (!currentUser) {
+
+        console.log(
+            "No logged-in user."
+        );
+
+        window.location.href =
+            "/index.html";
+
+        return;
+    }
+
+
+    console.log(
+        "AmicoNet logged in as:",
+        currentUser
+    );
+
+
+    // ==================================================
+    // VARIABLES
+    // ==================================================
+
     let users = [];
 
-    const onlineUsers = new Set();
+    let receiver = null;
 
     let stompClient = null;
 
+    const onlineUsers =
+        new Set();
+
 
     // ==================================================
-    // CONNECT WEBSOCKET
-    // ==================================================
-
-    function connectWebSocket() {
-
-        console.log("Connecting to WebSocket...");
-
-        stompClient = new StompJs.Client({
-
-            webSocketFactory: function () {
-                return new SockJS("/ws");
-            },
-
-            debug: function (str) {
-                console.log("[STOMP]", str);
-            },
-
-            reconnectDelay: 5000
-        });
-
-
-        stompClient.onConnect = function (frame) {
-
-            console.log("WebSocket connected!", frame);
-
-
-            // ==================================================
-            // MESSAGE SUBSCRIPTION
-            // ==================================================
-
-            stompClient.subscribe(
-                "/topic/messages",
-                function (message) {
-
-                    try {
-
-                        const receivedMessage =
-                            JSON.parse(message.body);
-
-                        if (!receiver) {
-                            return;
-                        }
-
-                        const belongsToCurrentChat =
-                            (
-                                receivedMessage.sender === currentUser &&
-                                receivedMessage.receiver === receiver
-                            ) ||
-                            (
-                                receivedMessage.sender === receiver &&
-                                receivedMessage.receiver === currentUser
-                            );
-
-                        if (belongsToCurrentChat) {
-                            displayMessage(receivedMessage);
-                        }
-
-                    } catch (error) {
-                        console.error(
-                            "Message parsing error:",
-                            error
-                        );
-                    }
-                }
-            );
-
-
-            // ==================================================
-            // PRESENCE
-            // ==================================================
-
-            stompClient.subscribe(
-                "/topic/presence",
-                function (message) {
-
-                    try {
-
-                        const presence =
-                            JSON.parse(message.body);
-
-                        if (presence.status === "ONLINE") {
-
-                            onlineUsers.add(
-                                presence.username
-                            );
-
-                        } else if (
-                            presence.status === "OFFLINE"
-                        ) {
-
-                            onlineUsers.delete(
-                                presence.username
-                            );
-                        }
-
-                        updateOnlineStatus();
-                        renderUsers(users);
-
-                    } catch (error) {
-
-                        console.error(
-                            "Presence error:",
-                            error
-                        );
-                    }
-                }
-            );
-
-
-            sendPresence("ONLINE");
-        };
-
-
-        stompClient.onStompError = function (frame) {
-            console.error("STOMP error:", frame);
-        };
-
-
-        stompClient.onWebSocketError = function (error) {
-            console.error("WebSocket error:", error);
-        };
-
-
-        stompClient.onWebSocketClose = function () {
-            console.log("WebSocket disconnected.");
-        };
-
-
-        stompClient.activate();
-    }
-
-
-    // ======================================================
-    // SEND PRESENCE
-    // ======================================================
-
-    function sendPresence(status) {
-
-        if (
-            !stompClient ||
-            !stompClient.connected
-        ) {
-            return;
-        }
-
-        stompClient.publish({
-
-            destination: "/app/presence",
-
-            body: JSON.stringify({
-                username: currentUser,
-                status: status
-            })
-        });
-    }
-
-
-    // ======================================================
-    // UPDATE ONLINE STATUS
-    // ======================================================
-
-    function updateOnlineStatus() {
-
-        if (!receiver) {
-
-            onlineStatus.textContent = "● Offline";
-
-            onlineStatus.classList.remove("online");
-
-            return;
-        }
-
-        if (onlineUsers.has(receiver)) {
-
-            onlineStatus.textContent = "● Online";
-
-            onlineStatus.classList.add("online");
-
-        } else {
-
-            onlineStatus.textContent = "● Offline";
-
-            onlineStatus.classList.remove("online");
-        }
-    }
-
-
-    // ======================================================
     // LOAD USERS
-    // ======================================================
+    // ==================================================
 
     async function loadUsers() {
 
         try {
 
-            const response = await fetch("/api/users");
+            const response =
+                await fetch("/api/users");
+
 
             if (!response.ok) {
 
-                console.error(
-                    "Could not load users:",
+                throw new Error(
+                    "HTTP " +
                     response.status
                 );
-
-                return;
             }
 
-            users = await response.json();
 
-            console.log("Users loaded:", users);
+            users =
+                await response.json();
+
+
+            console.log(
+                "Users loaded:",
+                users
+            );
+
 
             renderUsers(users);
+
+
+            // Show own profile picture
+            const me =
+                users.find(function (user) {
+
+                    return user.username ===
+                        currentUser;
+
+                });
+
+
+            if (
+                me &&
+                me.profilePhoto &&
+                profilePhoto
+            ) {
+
+                profilePhoto.src =
+                    me.profilePhoto;
+
+                profilePhoto.style.display =
+                    "block";
+
+                if (profilePhotoButton) {
+
+                    profilePhotoButton.style.display =
+                        "none";
+                }
+            }
+
 
         } catch (error) {
 
             console.error(
-                "Error loading users:",
+                "Could not load users:",
                 error
             );
+
+
+            chatList.innerHTML =
+                "<div style='padding:20px;color:#ff6666'>" +
+                "Could not load users." +
+                "</div>";
         }
     }
 
 
-    // ======================================================
+    // ==================================================
     // RENDER USERS
-    // ======================================================
+    // ==================================================
 
     function renderUsers(userList) {
 
         chatList.innerHTML = "";
 
-        userList.forEach(function (user) {
 
-            if (user.username === currentUser) {
-                return;
-            }
+        const otherUsers =
+            userList.filter(function (user) {
+
+                return user.username !==
+                    currentUser;
+
+            });
+
+
+        if (otherUsers.length === 0) {
+
+            chatList.innerHTML =
+                "<div style='padding:20px;color:#aaa'>" +
+                "No other users found." +
+                "</div>";
+
+            return;
+        }
+
+
+        otherUsers.forEach(function (user) {
 
             const chatItem =
                 document.createElement("div");
 
-            chatItem.classList.add("chat-item");
+            chatItem.className =
+                "chat-user";
 
 
+            // ==================================================
             // AVATAR
+            // ==================================================
 
             const avatar =
                 document.createElement("div");
 
-            avatar.classList.add("avatar");
+            avatar.className =
+                "avatar";
 
 
             if (user.profilePhoto) {
@@ -396,8 +390,23 @@ if (
                 const image =
                     document.createElement("img");
 
-                image.src = user.profilePhoto;
-                image.alt = user.username;
+                image.src =
+                    user.profilePhoto;
+
+                image.alt =
+                    user.username;
+
+                image.style.width =
+                    "100%";
+
+                image.style.height =
+                    "100%";
+
+                image.style.objectFit =
+                    "cover";
+
+                image.style.borderRadius =
+                    "50%";
 
                 avatar.appendChild(image);
 
@@ -410,51 +419,73 @@ if (
             }
 
 
+            // ==================================================
             // USER INFO
+            // ==================================================
 
             const chatInfo =
                 document.createElement("div");
 
-            chatInfo.classList.add("chat-info");
+            chatInfo.className =
+                "chat-info";
 
 
-            const chatUsername =
+            const name =
                 document.createElement("div");
 
-            chatUsername.classList.add("chat-name");
+            name.className =
+                "chat-name";
 
-            chatUsername.textContent =
+            name.textContent =
                 user.username;
 
 
-            const lastMessage =
+            const status =
                 document.createElement("div");
 
-            lastMessage.classList.add("last-message");
+            status.className =
+                "last-message";
 
 
-            if (onlineUsers.has(user.username)) {
+            if (
+                onlineUsers.has(
+                    user.username
+                )
+            ) {
 
-                lastMessage.textContent = "● Online";
-                lastMessage.classList.add("online");
+                status.textContent =
+                    "● Online";
+
+                status.classList.add(
+                    "online"
+                );
 
             } else {
 
-                lastMessage.textContent = "● Offline";
+                status.textContent =
+                    "● Offline";
             }
 
 
-            chatInfo.appendChild(chatUsername);
-            chatInfo.appendChild(lastMessage);
+            chatInfo.appendChild(name);
+
+            chatInfo.appendChild(status);
 
             chatItem.appendChild(avatar);
+
             chatItem.appendChild(chatInfo);
 
+
+            // ==================================================
+            // CLICK USER
+            // ==================================================
 
             chatItem.addEventListener(
                 "click",
                 function () {
+
                     selectUser(user);
+
                 }
             );
 
@@ -464,17 +495,150 @@ if (
     }
 
 
-    // ======================================================
+    // ==================================================
+    // ADD PERSON
+    // ==================================================
+
+    if (addUserButton) {
+
+        addUserButton.addEventListener(
+            "click",
+            async function () {
+
+                const entered =
+                    prompt(
+                        "Enter username:"
+                    );
+
+
+                if (!entered) {
+                    return;
+                }
+
+
+                const username =
+                    entered.trim();
+
+
+                if (!username) {
+                    return;
+                }
+
+
+                if (
+                    username.toLowerCase() ===
+                    currentUser.toLowerCase()
+                ) {
+
+                    alert(
+                        "You cannot add yourself."
+                    );
+
+                    return;
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/users"
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Could not load users."
+                        );
+                    }
+
+
+                    const allUsers =
+                        await response.json();
+
+
+                    const foundUser =
+                        allUsers.find(
+                            function (user) {
+
+                                return user.username
+                                    .toLowerCase() ===
+                                    username.toLowerCase();
+
+                            }
+                        );
+
+
+                    if (!foundUser) {
+
+                        alert(
+                            "Username not found."
+                        );
+
+                        return;
+                    }
+
+
+                    const exists =
+                        users.some(
+                            function (user) {
+
+                                return user.username ===
+                                    foundUser.username;
+
+                            }
+                        );
+
+
+                    if (!exists) {
+
+                        users.push(
+                            foundUser
+                        );
+
+                        renderUsers(
+                            users
+                        );
+                    }
+
+
+                    selectUser(
+                        foundUser
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                    alert(
+                        "Could not find user."
+                    );
+                }
+            }
+        );
+    }
+
+
+    // ==================================================
     // SELECT USER
-    // ======================================================
+    // ==================================================
 
     function selectUser(user) {
 
-        receiver = user.username;
+        receiver =
+            user.username;
 
-        chatName.textContent = user.username;
 
-        chatAvatar.innerHTML = "";
+        chatName.textContent =
+            user.username;
+
+
+        chatAvatar.innerHTML =
+            "";
 
 
         if (user.profilePhoto) {
@@ -482,10 +646,27 @@ if (
             const image =
                 document.createElement("img");
 
-            image.src = user.profilePhoto;
-            image.alt = user.username;
+            image.src =
+                user.profilePhoto;
 
-            chatAvatar.appendChild(image);
+            image.alt =
+                user.username;
+
+            image.style.width =
+                "100%";
+
+            image.style.height =
+                "100%";
+
+            image.style.objectFit =
+                "cover";
+
+            image.style.borderRadius =
+                "50%";
+
+            chatAvatar.appendChild(
+                image
+            );
 
         } else {
 
@@ -498,18 +679,72 @@ if (
 
         updateOnlineStatus();
 
-        messageInput.disabled = false;
-        sendButton.disabled = false;
 
-        messageInput.focus();
+        messageInput.disabled =
+            false;
+
+        sendButton.disabled =
+            false;
+
+
+        messagesContainer.innerHTML =
+            "";
+
 
         loadMessages();
+
+
+        messageInput.focus();
     }
 
 
-    // ======================================================
-    // LOAD MESSAGES
-    // ======================================================
+    // ==================================================
+    // ONLINE STATUS
+    // ==================================================
+
+    function updateOnlineStatus() {
+
+        if (!receiver) {
+
+            onlineStatus.textContent =
+                "● Offline";
+
+            onlineStatus.classList.remove(
+                "online"
+            );
+
+            return;
+        }
+
+
+        if (
+            onlineUsers.has(
+                receiver
+            )
+        ) {
+
+            onlineStatus.textContent =
+                "● Online";
+
+            onlineStatus.classList.add(
+                "online"
+            );
+
+        } else {
+
+            onlineStatus.textContent =
+                "● Offline";
+
+            onlineStatus.classList.remove(
+                "online"
+            );
+        }
+    }
+
+
+    // ==================================================
+    // LOAD OLD MESSAGES
+    // ==================================================
 
     async function loadMessages() {
 
@@ -517,31 +752,55 @@ if (
             return;
         }
 
+
         try {
 
             const response =
                 await fetch(
                     "/api/messages?user1=" +
-                    encodeURIComponent(currentUser) +
+                    encodeURIComponent(
+                        currentUser
+                    ) +
                     "&user2=" +
-                    encodeURIComponent(receiver)
+                    encodeURIComponent(
+                        receiver
+                    )
                 );
 
+
             if (!response.ok) {
+
+                console.error(
+                    "Messages request failed:",
+                    response.status
+                );
+
                 return;
             }
+
 
             const messages =
                 await response.json();
 
-            messagesContainer.innerHTML = "";
 
-            messages.forEach(function (message) {
-                displayMessage(message);
-            });
+            messagesContainer.innerHTML =
+                "";
+
+
+            messages.forEach(
+                function (message) {
+
+                    displayMessage(
+                        message
+                    );
+
+                }
+            );
+
 
             messagesContainer.scrollTop =
                 messagesContainer.scrollHeight;
+
 
         } catch (error) {
 
@@ -553,59 +812,88 @@ if (
     }
 
 
-    // ======================================================
+    // ==================================================
     // SEND MESSAGE
-    // ======================================================
+    // ==================================================
 
     function sendMessage() {
 
         const text =
             messageInput.value.trim();
 
-        if (text === "") {
+
+        if (!text) {
             return;
         }
 
+
         if (!receiver) {
-            alert("Please select a person first.");
+
+            alert(
+                "Select a person first."
+            );
+
             return;
         }
+
 
         if (
             !stompClient ||
             !stompClient.connected
         ) {
-            alert("Chat server is not connected yet.");
+
+            alert(
+                "Chat server is not connected."
+            );
+
             return;
         }
 
+
         const message = {
 
-            sender: currentUser,
+            sender:
+                currentUser,
 
-            receiver: receiver,
+            receiver:
+                receiver,
 
-            content: text
+            content:
+                text
         };
 
 
         stompClient.publish({
 
-            destination: "/app/chat",
+            destination:
+                "/app/chat",
 
-            body: JSON.stringify(message)
+            body:
+                JSON.stringify(
+                    message
+                )
         });
 
 
-        messageInput.value = "";
+        messageInput.value =
+            "";
+
     }
 
+
+    // ==================================================
+    // SEND BUTTON
+    // ==================================================
 
     sendButton.addEventListener(
         "click",
         sendMessage
     );
 
+
+    // ==================================================
+    // ENTER TO SEND
+    // ==================================================
 
     messageInput.addEventListener(
         "keydown",
@@ -621,35 +909,57 @@ if (
     );
 
 
-    // ======================================================
+    // ==================================================
     // DISPLAY MESSAGE
-    // ======================================================
+    // ==================================================
 
     function displayMessage(message) {
 
-        const messageElement =
+        const element =
             document.createElement("div");
 
 
-        if (message.sender === currentUser) {
+        if (
+            message.sender ===
+            currentUser
+        ) {
 
-            messageElement.classList.add(
-                "message",
-                "sent"
-            );
+            element.className =
+                "message sent";
 
         } else {
 
-            messageElement.classList.add(
-                "message",
-                "received"
-            );
+            element.className =
+                "message received";
         }
 
 
+        const content =
+            document.createElement("span");
+
+
+        content.textContent =
+            message.content;
+
+
         const time =
-            message.timestamp
-                ? new Date(
+            document.createElement("span");
+
+
+        time.style.fontSize =
+            "11px";
+
+        time.style.opacity =
+            "0.7";
+
+        time.style.marginLeft =
+            "6px";
+
+
+        if (message.timestamp) {
+
+            time.textContent =
+                new Date(
                     message.timestamp
                 ).toLocaleTimeString(
                     [],
@@ -657,19 +967,26 @@ if (
                         hour: "2-digit",
                         minute: "2-digit"
                     }
-                )
-                : "Now";
+                );
+
+        } else {
+
+            time.textContent =
+                "Now";
+        }
 
 
-        messageElement.innerHTML =
-            escapeHtml(message.content) +
-            " <span>" +
-            time +
-            "</span>";
+        element.appendChild(
+            content
+        );
+
+        element.appendChild(
+            time
+        );
 
 
         messagesContainer.appendChild(
-            messageElement
+            element
         );
 
 
@@ -678,9 +995,9 @@ if (
     }
 
 
-    // ======================================================
-    // SEARCH
-    // ======================================================
+    // ==================================================
+    // SEARCH USERS
+    // ==================================================
 
     if (searchInput) {
 
@@ -690,185 +1007,496 @@ if (
 
                 const searchText =
                     searchInput.value
-                        .toLowerCase()
-                        .trim();
+                        .trim()
+                        .toLowerCase();
 
 
-                const filteredUsers =
-                    users.filter(function (user) {
+                const filtered =
+                    users.filter(
+                        function (user) {
 
-                        return user.username
-                            .toLowerCase()
-                            .includes(searchText);
-                    });
+                            return user.username
+                                .toLowerCase()
+                                .includes(
+                                    searchText
+                                );
+                        }
+                    );
 
 
-                renderUsers(filteredUsers);
+                renderUsers(
+                    filtered
+                );
             }
         );
     }
 
 
-    // ======================================================
-    // SECURITY
-    // ======================================================
+    // ==================================================
+    // CONNECT WEBSOCKET
+    // ==================================================
 
-    function escapeHtml(text) {
+    function connectWebSocket() {
 
-        const div =
-            document.createElement("div");
+        console.log(
+            "Connecting to WebSocket..."
+        );
 
-        div.textContent = text;
 
-        return div.innerHTML;
+        stompClient =
+            new StompJs.Client({
+
+                webSocketFactory:
+                    function () {
+
+                        return new SockJS(
+                            "/ws"
+                        );
+                    },
+
+
+                reconnectDelay:
+                    5000,
+
+
+                debug:
+                    function (message) {
+
+                        console.log(
+                            "[STOMP]",
+                            message
+                        );
+                    }
+            });
+
+
+        // ==================================================
+        // CONNECTED
+        // ==================================================
+
+        stompClient.onConnect =
+            function () {
+
+                console.log(
+                    "WebSocket connected!"
+                );
+
+
+                // ==================================================
+                // MESSAGE SUBSCRIPTION
+                // ==================================================
+
+                stompClient.subscribe(
+                    "/topic/messages",
+                    function (message) {
+
+                        try {
+
+                            const data =
+                                JSON.parse(
+                                    message.body
+                                );
+
+
+                            if (!receiver) {
+                                return;
+                            }
+
+
+                            const belongs =
+                                (
+                                    data.sender ===
+                                        currentUser &&
+                                    data.receiver ===
+                                        receiver
+                                ) ||
+                                (
+                                    data.sender ===
+                                        receiver &&
+                                    data.receiver ===
+                                        currentUser
+                                );
+
+
+                            if (belongs) {
+
+                                displayMessage(
+                                    data
+                                );
+                            }
+
+
+                        } catch (error) {
+
+                            console.error(
+                                "Message error:",
+                                error
+                            );
+                        }
+                    }
+                );
+
+
+                // ==================================================
+                // PRESENCE
+                // ==================================================
+
+                stompClient.subscribe(
+                    "/topic/presence",
+                    function (message) {
+
+                        try {
+
+                            const presence =
+                                JSON.parse(
+                                    message.body
+                                );
+
+
+                            if (
+                                presence.status ===
+                                "ONLINE"
+                            ) {
+
+                                onlineUsers.add(
+                                    presence.username
+                                );
+
+                            } else {
+
+                                onlineUsers.delete(
+                                    presence.username
+                                );
+                            }
+
+
+                            updateOnlineStatus();
+
+                            renderUsers(
+                                users
+                            );
+
+
+                        } catch (error) {
+
+                            console.error(
+                                "Presence error:",
+                                error
+                            );
+                        }
+                    }
+                );
+
+
+                sendPresence(
+                    "ONLINE"
+                );
+            };
+
+
+        // ==================================================
+        // STOMP ERROR
+        // ==================================================
+
+        stompClient.onStompError =
+            function (frame) {
+
+                console.error(
+                    "STOMP error:",
+                    frame
+                );
+            };
+
+
+        // ==================================================
+        // WEBSOCKET ERROR
+        // ==================================================
+
+        stompClient.onWebSocketError =
+            function (error) {
+
+                console.error(
+                    "WebSocket error:",
+                    error
+                );
+            };
+
+
+        // ==================================================
+        // WEBSOCKET CLOSE
+        // ==================================================
+
+        stompClient.onWebSocketClose =
+            function () {
+
+                console.log(
+                    "WebSocket disconnected."
+                );
+            };
+
+
+        stompClient.activate();
     }
 
 
-    // ======================================================
-    // PAGE CLOSE
-    // ======================================================
+    // ==================================================
+    // PRESENCE
+    // ==================================================
 
-    window.addEventListener(
-        "beforeunload",
-        function () {
-            sendPresence("OFFLINE");
+    function sendPresence(status) {
+
+        if (
+            !stompClient ||
+            !stompClient.connected
+        ) {
+            return;
         }
-    );
 
 
-    // ======================================================
-    // START
-    // ======================================================
+        stompClient.publish({
 
-    connectWebSocket();
+            destination:
+                "/app/presence",
 
-    loadUsers();
-}
+            body:
+                JSON.stringify({
 
+                    username:
+                        currentUser,
 
-// ======================================================
-// PROFILE PHOTO
-// ======================================================
-
-const profilePhotoButton =
-    document.getElementById("profilePhotoButton");
-
-const profilePhotoInput =
-    document.getElementById("profilePhotoInput");
-
-const profilePhoto =
-    document.getElementById("profilePhoto");
+                    status:
+                        status
+                })
+        });
+    }
 
 
-if (
-    profilePhotoButton &&
-    profilePhotoInput &&
-    profilePhoto
-) {
+    // ==================================================
+    // PROFILE PHOTO
+    // ==================================================
 
-    profilePhotoButton.addEventListener(
-        "click",
-        function () {
-            profilePhotoInput.click();
-        }
-    );
+    if (
+        profilePhotoButton &&
+        profilePhotoInput &&
+        profilePhoto
+    ) {
 
+        // ----------------------------------------------
+        // OPEN FILE PICKER
+        // ----------------------------------------------
 
-    profilePhotoInput.addEventListener(
-        "change",
-        async function () {
+        profilePhotoButton.addEventListener(
+            "click",
+            function () {
 
-            const file =
-                profilePhotoInput.files[0];
+                console.log(
+                    "Profile photo button clicked"
+                );
 
-            if (!file) {
-                return;
+                profilePhotoInput.click();
             }
-
-            if (!file.type.startsWith("image/")) {
-
-                alert("Please select an image.");
-
-                return;
-            }
+        );
 
 
-            const username =
-                localStorage.getItem("username");
+        // ----------------------------------------------
+        // IMAGE SELECTED
+        // ----------------------------------------------
+
+        profilePhotoInput.addEventListener(
+            "change",
+            async function () {
+
+                const file =
+                    profilePhotoInput.files[0];
 
 
-            if (!username) {
-
-                alert("Please login first.");
-
-                return;
-            }
+                if (!file) {
+                    return;
+                }
 
 
-            const formData =
-                new FormData();
-
-            formData.append(
-                "username",
-                username
-            );
-
-            formData.append(
-                "file",
-                file
-            );
+                console.log(
+                    "Selected image:",
+                    file.name
+                );
 
 
-            try {
+                // ------------------------------------------
+                // CHECK FILE TYPE
+                // ------------------------------------------
 
-                const response =
-                    await fetch(
-                        "/api/users/profile-photo",
-                        {
-                            method: "POST",
-                            body: formData
-                        }
+                if (
+                    !file.type.startsWith(
+                        "image/"
+                    )
+                ) {
+
+                    alert(
+                        "Please select an image."
                     );
 
-
-                if (!response.ok) {
-
-                    const error =
-                        await response.text();
-
-                    alert(error);
+                    profilePhotoInput.value =
+                        "";
 
                     return;
                 }
 
 
-                const imageData =
-                    await response.text();
+                // ------------------------------------------
+                // CHECK SIZE
+                // ------------------------------------------
+
+                if (
+                    file.size >
+                    5 * 1024 * 1024
+                ) {
+
+                    alert(
+                        "Image must be smaller than 5 MB."
+                    );
+
+                    profilePhotoInput.value =
+                        "";
+
+                    return;
+                }
 
 
-                profilePhoto.src =
-                    imageData;
+                // ------------------------------------------
+                // FORM DATA
+                // ------------------------------------------
 
-                profilePhoto.style.display =
-                    "block";
-
-                profilePhotoButton.style.display =
-                    "none";
+                const formData =
+                    new FormData();
 
 
-                alert("Profile photo updated!");
-
-                location.reload();
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "Could not upload profile photo."
+                formData.append(
+                    "username",
+                    currentUser
                 );
+
+
+                formData.append(
+                    "file",
+                    file
+                );
+
+
+                try {
+
+                    profilePhotoButton.disabled =
+                        true;
+
+
+                    const response =
+                        await fetch(
+                            "/api/users/profile-photo",
+                            {
+                                method: "POST",
+                                body: formData
+                            }
+                        );
+
+
+                    const result =
+                        await response.text();
+
+
+                    console.log(
+                        "Profile upload response:",
+                        response.status,
+                        result
+                    );
+
+
+                    if (!response.ok) {
+
+                        alert(
+                            "Upload failed: " +
+                            result
+                        );
+
+                        return;
+                    }
+
+
+                    // --------------------------------------
+                    // SHOW PHOTO
+                    // --------------------------------------
+
+                    profilePhoto.src =
+                        result;
+
+
+                    profilePhoto.style.display =
+                        "block";
+
+
+                    profilePhotoButton.style.display =
+                        "none";
+
+
+                    alert(
+                        "Profile picture updated!"
+                    );
+
+
+                    // Reload users
+                    await loadUsers();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Profile upload error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Could not upload profile picture."
+                    );
+
+
+                } finally {
+
+                    profilePhotoButton.disabled =
+                        false;
+
+                    profilePhotoInput.value =
+                        "";
+                }
             }
+        );
+    }
+
+
+    // ==================================================
+    // CLOSE PAGE
+    // ==================================================
+
+    window.addEventListener(
+        "beforeunload",
+        function () {
+
+            sendPresence(
+                "OFFLINE"
+            );
         }
     );
-}
-```
+
+
+    // ==================================================
+    // START APP
+    // ==================================================
+
+    console.log(
+        "Starting AmicoNet..."
+    );
+
+
+    loadUsers();
+
+    connectWebSocket();
+
+});
