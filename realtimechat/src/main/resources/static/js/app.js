@@ -1,1410 +1,888 @@
-// ======================================================
-// SIGN UP
-// ======================================================
+/* ======================================================
+   RESET
+====================================================== */
 
-const signupForm = document.getElementById("signupForm");
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-if (signupForm) {
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 
-    signupForm.addEventListener("submit", async function (event) {
-
-        event.preventDefault();
-
-        const username =
-            document.getElementById("username").value.trim();
-
-        const email =
-            document.getElementById("email").value.trim();
-
-        const password =
-            document.getElementById("password").value;
-
-        const message =
-            document.getElementById("message");
-
-        try {
-
-            const response = await fetch("/api/auth/signup", {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password
-                })
-            });
-
-            const result = await response.text();
-
-            if (response.ok) {
-
-                message.textContent =
-                    "Account created successfully!";
-
-                message.style.color =
-                    "#31a24c";
-
-                signupForm.reset();
-
-            } else {
-
-                message.textContent =
-                    result;
-
-                message.style.color =
-                    "#ff4d4d";
-            }
-
-        } catch (error) {
-
-            console.error(error);
-
-            message.textContent =
-                "Could not connect to server.";
-
-            message.style.color =
-                "#ff4d4d";
-        }
-
-    });
-
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111;
+    color: white;
 }
 
 
-// ======================================================
-// LOGIN
-// ======================================================
+/* ======================================================
+   LOGIN / SIGNUP
+====================================================== */
 
-const loginForm =
-    document.getElementById("loginForm");
+.auth-container {
+    width: 100%;
+    min-height: 100vh;
 
-if (loginForm) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    loginForm.addEventListener("submit", async function (event) {
+    padding: 20px;
 
-        event.preventDefault();
+    background: #f4f7fb;
+}
 
-        const username =
-            document.getElementById("loginUsername").value.trim();
+.auth-box {
+    width: 400px;
+    max-width: 100%;
 
-        const password =
-            document.getElementById("loginPassword").value;
+    padding: 40px;
 
-        const message =
-            document.getElementById("loginMessage");
+    background: white;
 
-        try {
+    border-radius: 18px;
 
-            const response = await fetch("/api/auth/login", {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 
-                method: "POST",
+    text-align: center;
+}
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+.auth-box h1 {
+    font-size: 34px;
+    color: #1683ff;
+    margin-bottom: 10px;
+}
 
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            });
+.auth-box > p {
+    color: #777;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
 
-            const result =
-                await response.text();
+.auth-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-            if (response.ok) {
+.auth-box input {
+    width: 100%;
+    height: 52px;
 
-                message.textContent =
-                    "Login successful!";
+    padding: 0 16px;
 
-                message.style.color =
-                    "#31a24c";
+    border: 1px solid #d9e0e8;
+    border-radius: 10px;
 
-                localStorage.setItem(
-                    "username",
-                    username
-                );
+    outline: none;
 
-                setTimeout(function () {
+    background: #f8fafc;
+    color: #222;
 
-                    window.location.href =
-                        "/chat.html";
+    font-size: 16px;
+}
 
-                }, 500);
+.auth-box input:focus {
+    border-color: #1683ff;
 
-            } else {
+    background: white;
 
-                message.textContent =
-                    result;
+    box-shadow: 0 0 0 3px rgba(22, 131, 255, 0.1);
+}
 
-                message.style.color =
-                    "#ff4d4d";
-            }
+.auth-box button {
+    width: 100%;
+    height: 52px;
 
-        } catch (error) {
+    border: none;
+    border-radius: 10px;
 
-            console.error(error);
+    background: #1683ff;
+    color: white;
 
-            message.textContent =
-                "Could not connect to server.";
+    font-size: 17px;
+    font-weight: bold;
 
-            message.style.color =
-                "#ff4d4d";
-        }
+    cursor: pointer;
+}
 
-    });
+.auth-box button:hover {
+    background: #0d73e5;
+}
 
+#loginMessage,
+#message {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.login-link {
+    margin-top: 22px;
+    color: #777;
+    font-size: 15px;
+}
+
+.login-link a {
+    color: #1683ff;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 
-// ======================================================
-// CHAT ELEMENTS
-// ======================================================
+/* ======================================================
+   CHAT APP
+====================================================== */
 
-const sendButton =
-    document.getElementById("sendButton");
+.chat-app {
+    width: 100%;
+    height: 100vh;
 
-const messageInput =
-    document.getElementById("messageInput");
+    display: flex;
 
-const messagesContainer =
-    document.getElementById("messages");
+    background: #111;
 
-const chatList =
-    document.getElementById("chatList");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const chatName =
-    document.getElementById("chatName");
-
-const chatAvatar =
-    document.getElementById("chatAvatar");
-
-const onlineStatus =
-    document.getElementById("onlineStatus");
-
-
-// ======================================================
-// CHAT SYSTEM
-// ======================================================
-
-if (
-    sendButton &&
-    messageInput &&
-    messagesContainer &&
-    chatList
-) {
-
-    console.log("Chat JavaScript loaded!");
-
-    // ==================================================
-    // CURRENT USER
-    // ==================================================
-
-    const currentUser =
-        localStorage.getItem("username") ||
-        "anonymous";
-
-    console.log(
-        "Current user:",
-        currentUser
-    );
-
-
-    // ==================================================
-    // SELECTED RECEIVER
-    // ==================================================
-
-    let receiver = null;
-
-
-    // ==================================================
-    // USERS
-    // ==================================================
-
-    let users = [];
-
-
-    // ==================================================
-    // ONLINE USERS
-    // ==================================================
-
-    const onlineUsers =
-        new Set();
-
-
-    // ==================================================
-    // STOMP CLIENT
-    // ==================================================
-
-    let stompClient = null;
-
-
-    // ==================================================
-    // CONNECT WEBSOCKET
-    // ==================================================
-
-    function connectWebSocket() {
-
-        console.log(
-            "Connecting to WebSocket..."
-        );
-
-
-        stompClient =
-            new StompJs.Client({
-
-                // --------------------------------------
-                // SOCKJS CONNECTION
-                // --------------------------------------
-
-                webSocketFactory: function () {
-
-                    return new SockJS("/ws");
-
-                },
-
-
-                // --------------------------------------
-                // DEBUG
-                // --------------------------------------
-
-                debug: function (str) {
-
-                    console.log(
-                        "[STOMP]",
-                        str
-                    );
-
-                },
-
-
-                // --------------------------------------
-                // RECONNECT
-                // --------------------------------------
-
-                reconnectDelay: 5000
-
-            });
-
-
-        // ==================================================
-        // WHEN CONNECTED
-        // ==================================================
-
-        stompClient.onConnect = function (frame) {
-
-            console.log(
-                "WebSocket connected!",
-                frame
-            );
-
-
-            // ==================================================
-            // MESSAGE SUBSCRIPTION
-            // ==================================================
-
-            stompClient.subscribe(
-                "/topic/messages",
-                function (message) {
-
-                    try {
-
-                        const receivedMessage =
-                            JSON.parse(
-                                message.body
-                            );
-
-
-                        console.log(
-                            "Received message:",
-                            receivedMessage
-                        );
-
-
-                        if (!receiver) {
-                            return;
-                        }
-
-
-                        const belongsToCurrentChat =
-
-                            (
-                                receivedMessage.sender ===
-                                currentUser &&
-
-                                receivedMessage.receiver ===
-                                receiver
-                            )
-
-                            ||
-
-                            (
-                                receivedMessage.sender ===
-                                receiver &&
-
-                                receivedMessage.receiver ===
-                                currentUser
-                            );
-
-
-                        if (
-                            belongsToCurrentChat
-                        ) {
-
-                            displayMessage(
-                                receivedMessage
-                            );
-
-                        }
-
-                    } catch (error) {
-
-                        console.error(
-                            "Message parsing error:",
-                            error
-                        );
-
-                    }
-
-                }
-            );
-
-
-            // ==================================================
-            // PRESENCE SUBSCRIPTION
-            // ==================================================
-
-            stompClient.subscribe(
-                "/topic/presence",
-                function (message) {
-
-                    try {
-
-                        const presence =
-                            JSON.parse(
-                                message.body
-                            );
-
-
-                        console.log(
-                            "Presence:",
-                            presence
-                        );
-
-
-                        if (
-                            presence.status ===
-                            "ONLINE"
-                        ) {
-
-                            onlineUsers.add(
-                                presence.username
-                            );
-
-                        }
-
-
-                        else if (
-                            presence.status ===
-                            "OFFLINE"
-                        ) {
-
-                            onlineUsers.delete(
-                                presence.username
-                            );
-
-                        }
-
-
-                        updateOnlineStatus();
-
-                        renderUsers(users);
-
-                    } catch (error) {
-
-                        console.error(
-                            "Presence error:",
-                            error
-                        );
-
-                    }
-
-                }
-            );
-
-
-            // ==================================================
-            // TELL SERVER WE ARE ONLINE
-            // ==================================================
-
-            sendPresence("ONLINE");
-
-        };
-
-
-        // ==================================================
-        // WEBSOCKET ERROR
-        // ==================================================
-
-        stompClient.onStompError =
-            function (frame) {
-
-                console.error(
-                    "STOMP error:",
-                    frame
-                );
-
-            };
-
-
-        stompClient.onWebSocketError =
-            function (error) {
-
-                console.error(
-                    "WebSocket error:",
-                    error
-                );
-
-            };
-
-
-        // ==================================================
-        // WEBSOCKET CLOSED
-        // ==================================================
-
-        stompClient.onWebSocketClose =
-            function () {
-
-                console.log(
-                    "WebSocket disconnected."
-                );
-
-            };
-
-
-        // ==================================================
-        // ACTIVATE CLIENT
-        // ==================================================
-
-        stompClient.activate();
-
-    }
-
-
-    // ======================================================
-    // SEND PRESENCE
-    // ======================================================
-
-    function sendPresence(status) {
-
-        if (
-            !stompClient ||
-            !stompClient.connected
-        ) {
-
-            console.log(
-                "Cannot send presence - WebSocket not connected."
-            );
-
-            return;
-        }
-
-
-        stompClient.publish({
-
-            destination:
-                "/app/presence",
-
-            body:
-                JSON.stringify({
-
-                    username:
-                        currentUser,
-
-                    status:
-                        status
-
-                })
-
-        });
-
-    }
-
-
-    // ======================================================
-    // UPDATE ONLINE STATUS
-    // ======================================================
-
-    function updateOnlineStatus() {
-
-        if (!receiver) {
-
-            onlineStatus.textContent =
-                "● Offline";
-
-            onlineStatus.classList.remove(
-                "online"
-            );
-
-            return;
-        }
-
-
-        if (
-            onlineUsers.has(receiver)
-        ) {
-
-            onlineStatus.textContent =
-                "● Online";
-
-            onlineStatus.classList.add(
-                "online"
-            );
-
-        } else {
-
-            onlineStatus.textContent =
-                "● Offline";
-
-            onlineStatus.classList.remove(
-                "online"
-            );
-
-        }
-
-    }
-
-
-    // ======================================================
-    // LOAD USERS
-    // ======================================================
-
-    async function loadUsers() {
-
-        try {
-
-            const response =
-                await fetch("/api/users");
-
-
-            if (!response.ok) {
-
-                console.error(
-                    "Could not load users:",
-                    response.status
-                );
-
-                return;
-            }
-
-
-            users =
-                await response.json();
-
-
-            console.log(
-                "Users loaded:",
-                users
-            );
-
-
-            renderUsers(users);
-
-        } catch (error) {
-
-            console.error(
-                "Error loading users:",
-                error
-            );
-
-        }
-
-    }
-
-
-    // ======================================================
-    // RENDER USERS
-    // ======================================================
-
-    function renderUsers(userList) {
-
-        chatList.innerHTML = "";
-
-
-        userList.forEach(function (user) {
-
-            if (
-                user.username ===
-                currentUser
-            ) {
-
-                return;
-            }
-
-
-            const chatItem =
-                document.createElement("div");
-
-            chatItem.classList.add(
-                "chat-item"
-            );
-
-
-            // ==================================================
-            // AVATAR
-            // ==================================================
-
-            const avatar =
-                document.createElement("div");
-
-            avatar.classList.add(
-                "avatar"
-            );
-
-
-            if (user.profilePhoto) {
-
-                const image =
-                    document.createElement("img");
-
-                image.src =
-                    user.profilePhoto;
-
-                image.alt =
-                    user.username;
-
-                image.style.width =
-                    "100%";
-
-                image.style.height =
-                    "100%";
-
-                image.style.objectFit =
-                    "cover";
-
-                image.style.borderRadius =
-                    "50%";
-
-                avatar.appendChild(
-                    image
-                );
-
-            } else {
-
-                avatar.textContent =
-                    user.username
-                        .charAt(0)
-                        .toUpperCase();
-
-            }
-
-
-            // ==================================================
-            // USER INFO
-            // ==================================================
-
-            const chatInfo =
-                document.createElement("div");
-
-            chatInfo.classList.add(
-                "chat-info"
-            );
-
-
-            const chatUsername =
-                document.createElement("div");
-
-            chatUsername.classList.add(
-                "chat-name"
-            );
-
-            chatUsername.textContent =
-                user.username;
-
-
-            const lastMessage =
-                document.createElement("div");
-
-            lastMessage.classList.add(
-                "last-message"
-            );
-
-
-            if (
-                onlineUsers.has(
-                    user.username
-                )
-            ) {
-
-                lastMessage.textContent =
-                    "● Online";
-
-                lastMessage.classList.add(
-                    "online"
-                );
-
-            } else {
-
-                lastMessage.textContent =
-                    "● Offline";
-
-                lastMessage.classList.remove(
-                    "online"
-                );
-
-            }
-
-
-            chatInfo.appendChild(
-                chatUsername
-            );
-
-            chatInfo.appendChild(
-                lastMessage
-            );
-
-
-            chatItem.appendChild(
-                avatar
-            );
-
-            chatItem.appendChild(
-                chatInfo
-            );
-
-
-            // ==================================================
-            // CLICK USER
-            // ==================================================
-
-            chatItem.addEventListener(
-                "click",
-                function () {
-
-                    selectUser(user);
-
-                }
-            );
-
-
-            chatList.appendChild(
-                chatItem
-            );
-
-        });
-
-    }
-
-
-    // ======================================================
-    // SELECT USER
-    // ======================================================
-
-    function selectUser(user) {
-
-        receiver =
-            user.username;
-
-
-        console.log(
-            "Selected receiver:",
-            receiver
-        );
-
-
-        chatName.textContent =
-            user.username;
-
-
-        // ==================================================
-        // AVATAR
-        // ==================================================
-
-        chatAvatar.innerHTML = "";
-
-
-        if (user.profilePhoto) {
-
-            const image =
-                document.createElement("img");
-
-            image.src =
-                user.profilePhoto;
-
-            image.alt =
-                user.username;
-
-            image.style.width =
-                "100%";
-
-            image.style.height =
-                "100%";
-
-            image.style.objectFit =
-                "cover";
-
-            image.style.borderRadius =
-                "50%";
-
-            chatAvatar.appendChild(
-                image
-            );
-
-        } else {
-
-            chatAvatar.textContent =
-                user.username
-                    .charAt(0)
-                    .toUpperCase();
-
-        }
-
-
-        // ==================================================
-        // UPDATE STATUS
-        // ==================================================
-
-        updateOnlineStatus();
-
-
-        // ==================================================
-        // ENABLE MESSAGE INPUT
-        // ==================================================
-
-        messageInput.disabled =
-            false;
-
-        sendButton.disabled =
-            false;
-
-
-        messageInput.focus();
-
-
-        // ==================================================
-        // LOAD OLD MESSAGES
-        // ==================================================
-
-        loadMessages();
-
-    }
-
-
-    // ======================================================
-    // LOAD MESSAGES
-    // ======================================================
-
-    async function loadMessages() {
-
-        if (!receiver) {
-            return;
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    "/api/messages?user1=" +
-                    encodeURIComponent(
-                        currentUser
-                    ) +
-                    "&user2=" +
-                    encodeURIComponent(
-                        receiver
-                    )
-                );
-
-
-            if (!response.ok) {
-
-                console.error(
-                    "Could not load messages:",
-                    response.status
-                );
-
-                return;
-            }
-
-
-            const messages =
-                await response.json();
-
-
-            messagesContainer.innerHTML =
-                "";
-
-
-            messages.forEach(
-                function (message) {
-
-                    displayMessage(
-                        message
-                    );
-
-                }
-            );
-
-
-            messagesContainer.scrollTop =
-                messagesContainer.scrollHeight;
-
-        } catch (error) {
-
-            console.error(
-                "Error loading messages:",
-                error
-            );
-
-        }
-
-    }
-
-
-    // ======================================================
-    // SEND BUTTON
-    // ======================================================
-
-    sendButton.addEventListener(
-        "click",
-        sendMessage
-    );
-
-
-    // ======================================================
-    // ENTER TO SEND
-    // ======================================================
-
-    messageInput.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                event.preventDefault();
-
-                sendMessage();
-
-            }
-
-        }
-    );
-
-
-    // ======================================================
-    // SEND MESSAGE
-    // ======================================================
-
-    function sendMessage() {
-
-        const text =
-            messageInput.value.trim();
-
-
-        if (text === "") {
-            return;
-        }
-
-
-        if (!receiver) {
-
-            alert(
-                "Please select a person first."
-            );
-
-            return;
-        }
-
-
-        if (
-            !stompClient ||
-            !stompClient.connected
-        ) {
-
-            alert(
-                "Chat server is not connected yet."
-            );
-
-            console.error(
-                "STOMP is not connected."
-            );
-
-            return;
-        }
-
-
-        const message = {
-
-            sender:
-                currentUser,
-
-            receiver:
-                receiver,
-
-            content:
-                text
-
-        };
-
-
-        console.log(
-            "Sending message:",
-            message
-        );
-
-
-        // ==================================================
-        // STOMP V7 SEND
-        // ==================================================
-
-        stompClient.publish({
-
-            destination:
-                "/app/chat",
-
-            body:
-                JSON.stringify(
-                    message
-                )
-
-        });
-
-
-        messageInput.value =
-            "";
-
-    }
-
-
-    // ======================================================
-    // DISPLAY MESSAGE
-    // ======================================================
-
-    function displayMessage(message) {
-
-        const messageElement =
-            document.createElement("div");
-
-
-        if (
-            message.sender ===
-            currentUser
-        ) {
-
-            messageElement.classList.add(
-                "message",
-                "sent"
-            );
-
-        } else {
-
-            messageElement.classList.add(
-                "message",
-                "received"
-            );
-
-        }
-
-
-        const time =
-            message.timestamp
-
-                ? new Date(
-                    message.timestamp
-                ).toLocaleTimeString(
-                    [],
-                    {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    }
-                )
-
-                : "Now";
-
-
-        messageElement.innerHTML =
-            escapeHtml(
-                message.content
-            ) +
-            " <span>" +
-            time +
-            "</span>";
-
-
-        messagesContainer.appendChild(
-            messageElement
-        );
-
-
-        messagesContainer.scrollTop =
-            messagesContainer.scrollHeight;
-
-    }
-
-
-    // ======================================================
-    // SEARCH USERS
-    // ======================================================
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            function () {
-
-                const searchText =
-                    searchInput.value
-                        .toLowerCase()
-                        .trim();
-
-
-                const filteredUsers =
-                    users.filter(
-                        function (user) {
-
-                            return user.username
-                                .toLowerCase()
-                                .includes(
-                                    searchText
-                                );
-
-                        }
-                    );
-
-
-                renderUsers(
-                    filteredUsers
-                );
-
-            }
-        );
-
-    }
-
-
-    // ======================================================
-    // SECURITY
-    // ======================================================
-
-    function escapeHtml(text) {
-
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            text;
-
-        return div.innerHTML;
-
-    }
-
-
-    // ======================================================
-    // PAGE CLOSE
-    // ======================================================
-
-    window.addEventListener(
-        "beforeunload",
-        function () {
-
-            sendPresence(
-                "OFFLINE"
-            );
-
-        }
-    );
-
-
-    // ======================================================
-    // START CHAT
-    // ======================================================
-
-    connectWebSocket();
-
-    loadUsers();
-
+    overflow: hidden;
 }
 
 
-// ======================================================
-// PROFILE PHOTO
-// ======================================================
+/* ======================================================
+   SIDEBAR
+====================================================== */
 
-const profilePhotoButton =
-    document.getElementById(
-        "profilePhotoButton"
-    );
+.sidebar {
+    width: 370px;
+    min-width: 370px;
+    height: 100vh;
 
-const profilePhotoInput =
-    document.getElementById(
-        "profilePhotoInput"
-    );
+    background: #202020;
 
-const profilePhoto =
-    document.getElementById(
-        "profilePhoto"
-    );
+    border-right: 1px solid #333;
 
+    display: flex;
+    flex-direction: column;
 
-if (
-    profilePhotoButton &&
-    profilePhotoInput &&
-    profilePhoto
-) {
+    overflow: hidden;
+}
 
 
-    // ==================================================
-    // OPEN FILE PICKER
-    // ==================================================
+/* ======================================================
+   SIDEBAR HEADER
+====================================================== */
 
-    profilePhotoButton.addEventListener(
-        "click",
-        function () {
+.sidebar-header {
+    height: 90px;
+    min-height: 90px;
 
-            profilePhotoInput.click();
+    padding: 15px 20px;
 
-        }
-    );
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
+    border-bottom: 1px solid #333;
+}
 
-    // ==================================================
-    // UPLOAD PHOTO
-    // ==================================================
-
-    profilePhotoInput.addEventListener(
-        "change",
-        async function () {
-
-            const file =
-                profilePhotoInput.files[0];
+.sidebar-header h1 {
+    color: #1683ff;
+    font-size: 25px;
+}
 
 
-            if (!file) {
-                return;
-            }
+/* ======================================================
+   PROFILE
+====================================================== */
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-photo {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 2px solid #444;
+}
+
+.profile-btn {
+    width: 52px;
+    height: 52px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #1683ff;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
 
 
-            // ==================================================
-            // CHECK FILE TYPE
-            // ==================================================
+/* ======================================================
+   SEARCH
+====================================================== */
 
-            if (
-                !file.type.startsWith(
-                    "image/"
-                )
-            ) {
+.search-box {
+    padding: 15px;
+}
 
-                alert(
-                    "Please select an image."
-                );
+.search-box input {
+    width: 100%;
+    height: 48px;
 
-                return;
-            }
+    border: none;
+    outline: none;
 
+    border-radius: 25px;
 
-            const username =
-                localStorage.getItem(
-                    "username"
-                );
+    background: #3a3a3a;
 
+    color: white;
 
-            if (!username) {
+    padding: 0 20px;
 
-                alert(
-                    "Please login first."
-                );
+    font-size: 16px;
+}
 
-                return;
-            }
+.search-box input::placeholder {
+    color: #bbb;
+}
 
 
-            // ==================================================
-            // FORM DATA
-            // ==================================================
+/* ======================================================
+   CHAT LIST
+====================================================== */
 
-            const formData =
-                new FormData();
+.chat-list {
+    flex: 1;
 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 
-            formData.append(
-                "username",
-                username
-            );
+#chatList {
+    width: 100%;
+}
 
-            formData.append(
-                "file",
-                file
-            );
+#chatList > div {
+    display: flex;
+    align-items: center;
 
+    width: 100%;
+    min-height: 82px;
 
-            try {
+    padding: 12px 16px;
 
-                const response =
-                    await fetch(
-                        "/api/users/profile-photo",
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
+    cursor: pointer;
 
+    border-bottom: 1px solid #303030;
 
-                if (!response.ok) {
+    color: white;
+}
 
-                    const error =
-                        await response.text();
-
-                    alert(error);
-
-                    return;
-                }
+#chatList > div:hover {
+    background: #2b2b2b;
+}
 
 
-                const imageData =
-                    await response.text();
+/* ======================================================
+   AVATAR
+====================================================== */
+
+#chatList .avatar {
+    width: 56px;
+    height: 56px;
+
+    min-width: 56px;
+
+    border-radius: 50%;
+
+    background: #3b82f6;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    font-weight: bold;
+
+    margin-right: 14px;
+
+    overflow: hidden;
+}
+
+#chatList .avatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+}
 
 
-                profilePhoto.src =
-                    imageData;
+/* ======================================================
+   USER INFO
+====================================================== */
 
-                profilePhoto.style.display =
-                    "block";
+.chat-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-name {
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    margin-bottom: 5px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.last-message {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.last-message.online {
+    color: #22c55e;
+}
 
 
-                profilePhotoButton.style.display =
-                    "none";
+/* ======================================================
+   ADD PERSON
+====================================================== */
+
+.add-user-btn {
+    margin: 15px;
+
+    height: 52px;
+    min-height: 52px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #3a3a3a;
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+}
+
+.add-user-btn:hover {
+    background: #4a4a4a;
+}
 
 
-                alert(
-                    "Profile photo updated!"
-                );
+/* ======================================================
+   CHAT AREA
+====================================================== */
+
+.chat-area {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #111;
+
+    overflow: hidden;
+}
 
 
-                location.reload();
+/* ======================================================
+   CHAT HEADER
+====================================================== */
+
+.chat-header {
+    height: 92px;
+    min-height: 92px;
+
+    padding: 14px 22px;
+
+    display: flex;
+    align-items: center;
+
+    background: #202020;
+
+    border-bottom: 1px solid #333;
+}
 
 
-            } catch (error) {
+/* ======================================================
+   CHAT AVATAR
+====================================================== */
 
-                console.error(error);
+.chat-avatar-container {
+    width: 64px;
+    height: 64px;
 
-                alert(
-                    "Could not upload profile photo."
-                );
+    min-width: 64px;
 
-            }
+    border-radius: 50%;
 
-        }
-    );
+    overflow: hidden;
 
+    margin-right: 16px;
+}
+
+.chat-avatar-container .avatar {
+    width: 64px;
+    height: 64px;
+
+    border-radius: 50%;
+
+    background: #3b82f6;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.chat-profile-photo {
+    width: 64px;
+    height: 64px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+
+/* ======================================================
+   CHAT HEADER INFO
+====================================================== */
+
+.chat-header-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.chat-header-info h2 {
+    margin: 0;
+
+    font-size: 24px;
+
+    color: white;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.online-status {
+    font-size: 15px;
+    color: #888;
+}
+
+.online-status.online {
+    color: #22c55e;
+}
+
+
+/* ======================================================
+   MESSAGES
+====================================================== */
+
+.messages {
+    flex: 1;
+
+    min-height: 0;
+
+    padding: 30px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+/* ======================================================
+   MESSAGE
+====================================================== */
+
+.message {
+    max-width: 70%;
+
+    padding: 12px 18px;
+
+    border-radius: 20px;
+
+    font-size: 17px;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+.message.received {
+    align-self: flex-start;
+
+    background: #3b3b3b;
+
+    color: white;
+
+    border-bottom-left-radius: 5px;
+}
+
+.message.sent {
+    align-self: flex-end;
+
+    background: #1683ff;
+
+    color: white;
+
+    border-bottom-right-radius: 5px;
+}
+
+.message span {
+    font-size: 11px;
+
+    opacity: 0.7;
+
+    margin-left: 6px;
+}
+
+
+/* ======================================================
+   MESSAGE INPUT
+====================================================== */
+
+.message-input {
+    min-height: 90px;
+
+    padding: 18px 22px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    background: #202020;
+
+    border-top: 1px solid #333;
+}
+
+.message-input input {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 58px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 30px;
+
+    background: #3a3a3a;
+
+    color: white;
+
+    padding: 0 22px;
+
+    font-size: 18px;
+}
+
+.message-input input::placeholder {
+    color: #bbb;
+}
+
+.message-input button {
+    width: 58px;
+    height: 58px;
+
+    min-width: 58px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #1683ff;
+
+    color: white;
+
+    font-size: 25px;
+
+    cursor: pointer;
+}
+
+.message-input button:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+
+/* ======================================================
+   SCROLLBAR
+====================================================== */
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #171717;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 10px;
+}
+
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 700px) {
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+    }
+
+    .chat-app {
+        width: 100vw;
+        height: 100dvh;
+
+        display: block;
+
+        overflow: hidden;
+    }
+
+    /* Hide sidebar when chat is being viewed */
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+
+        height: 100dvh;
+
+        border-right: none;
+    }
+
+    .sidebar-header {
+        height: 75px;
+        min-height: 75px;
+
+        padding: 12px 16px;
+    }
+
+    .sidebar-header h1 {
+        font-size: 22px;
+    }
+
+    .profile-photo,
+    .profile-btn {
+        width: 45px;
+        height: 45px;
+    }
+
+    .search-box {
+        padding: 10px 12px;
+    }
+
+    .search-box input {
+        height: 45px;
+        font-size: 15px;
+    }
+
+    #chatList > div {
+        min-height: 70px;
+        padding: 10px 14px;
+    }
+
+    #chatList .avatar {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+
+        margin-right: 12px;
+    }
+
+    .chat-name {
+        font-size: 16px;
+    }
+
+    .last-message {
+        font-size: 13px;
+    }
+
+    .add-user-btn {
+        margin: 10px 12px;
+
+        height: 48px;
+        min-height: 48px;
+
+        font-size: 16px;
+    }
+
+    /*
+       CHAT AREA
+       On mobile it fills the screen.
+    */
+
+    .chat-area {
+        width: 100vw;
+        height: 100dvh;
+
+        min-width: 0;
+    }
+
+    .chat-header {
+        height: 70px;
+        min-height: 70px;
+
+        padding: 10px 14px;
+    }
+
+    .chat-avatar-container {
+        width: 48px;
+        height: 48px;
+
+        min-width: 48px;
+
+        margin-right: 12px;
+    }
+
+    .chat-avatar-container .avatar {
+        width: 48px;
+        height: 48px;
+
+        font-size: 20px;
+    }
+
+    .chat-profile-photo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .chat-header-info h2 {
+        font-size: 18px;
+    }
+
+    .online-status {
+        font-size: 13px;
+    }
+
+    .messages {
+        padding: 15px 12px;
+
+        gap: 9px;
+    }
+
+    .message {
+        max-width: 85%;
+
+        padding: 10px 14px;
+
+        font-size: 15px;
+    }
+
+    .message-input {
+        min-height: 70px;
+
+        padding: 10px 12px;
+
+        gap: 8px;
+    }
+
+    .message-input input {
+        height: 48px;
+
+        padding: 0 16px;
+
+        font-size: 16px;
+    }
+
+    .message-input button {
+        width: 48px;
+        height: 48px;
+
+        min-width: 48px;
+
+        font-size: 21px;
+    }
+}
+
+
+/* ======================================================
+   VERY SMALL PHONES
+====================================================== */
+
+@media (max-width: 400px) {
+
+    .auth-container {
+        padding: 12px;
+    }
+
+    .auth-box {
+        padding: 28px 20px;
+
+        border-radius: 14px;
+    }
+
+    .auth-box h1 {
+        font-size: 30px;
+    }
+
+    .auth-box input,
+    .auth-box button {
+        height: 48px;
+    }
+
+    .chat-header-info h2 {
+        font-size: 17px;
+    }
+
+    .message {
+        max-width: 90%;
+    }
 }
