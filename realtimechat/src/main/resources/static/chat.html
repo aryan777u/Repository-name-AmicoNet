@@ -1,23 +1,34 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
     <title>AmicoNet</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
 </head>
 
 <body>
 
 <div class="chat-app">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <!-- ==============================
+         SIDEBAR
+    =============================== -->
+
+    <aside class="sidebar" id="sidebar">
 
         <div class="sidebar-header">
 
@@ -30,7 +41,7 @@
                     src=""
                     alt="Profile"
                     class="profile-photo"
-                    style="display: none;"
+                    style="display:none;"
                 >
 
                 <input
@@ -44,10 +55,9 @@
                     id="profilePhotoButton"
                     type="button"
                     class="profile-btn"
-                    aria-label="Profile photo">
-
+                    aria-label="Profile photo"
+                >
                     👤
-
                 </button>
 
             </div>
@@ -69,12 +79,12 @@
         </div>
 
 
-        <!-- USERS -->
+        <!-- USER LIST -->
 
         <div
             class="chat-list"
-            id="chatList">
-
+            id="chatList"
+        >
         </div>
 
 
@@ -83,22 +93,33 @@
         <button
             class="add-user-btn"
             id="addUserButton"
-            type="button">
-
+            type="button"
+        >
             + Add Person
-
         </button>
 
     </aside>
 
 
-    <!-- CHAT -->
+    <!-- ==============================
+         CHAT AREA
+    =============================== -->
 
-    <main class="chat-area">
+    <main class="chat-area" id="chatArea">
 
         <!-- CHAT HEADER -->
 
         <header class="chat-header">
+
+            <button
+                id="mobileBackButton"
+                class="mobile-back-button"
+                type="button"
+                aria-label="Back"
+            >
+                ←
+            </button>
+
 
             <div class="chat-avatar-container">
 
@@ -107,15 +128,14 @@
                     class="chat-profile-photo"
                     src=""
                     alt="Profile"
-                    style="display: none;"
+                    style="display:none;"
                 >
 
                 <div
                     class="avatar"
-                    id="chatAvatar">
-
+                    id="chatAvatar"
+                >
                     ?
-
                 </div>
 
             </div>
@@ -129,10 +149,9 @@
 
                 <span
                     class="online-status"
-                    id="onlineStatus">
-
+                    id="onlineStatus"
+                >
                     ● Offline
-
                 </span>
 
             </div>
@@ -144,7 +163,8 @@
 
         <section
             class="messages"
-            id="messages">
+            id="messages"
+        >
 
             <div class="message received">
                 Select a person to start chatting.
@@ -168,10 +188,9 @@
             <button
                 id="sendButton"
                 type="button"
-                disabled>
-
+                disabled
+            >
                 ➤
-
             </button>
 
         </footer>
@@ -181,24 +200,129 @@
 </div>
 
 
-<!-- SOCKJS -->
+<!-- ==============================
+     SOCKJS
+=============================== -->
 
 <script
     src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js">
 </script>
 
 
-<!-- STOMP -->
+<!-- ==============================
+     STOMP
+=============================== -->
 
 <script
     src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.2.1/bundles/stomp.umd.min.js">
 </script>
 
 
-<!-- AMICONET JAVASCRIPT -->
+<!-- ==============================
+     AMICONET JAVASCRIPT
+=============================== -->
 
 <script src="js/app.js"></script>
+
+
+<!-- ==============================
+     MOBILE NAVIGATION
+=============================== -->
+
+<script>
+
+const sidebar =
+    document.getElementById("sidebar");
+
+const chatArea =
+    document.getElementById("chatArea");
+
+const backButton =
+    document.getElementById("mobileBackButton");
+
+const chatList =
+    document.getElementById("chatList");
+
+
+function showMobileChat() {
+
+    if (window.innerWidth <= 700) {
+
+        sidebar.classList.add("mobile-hidden");
+
+        chatArea.classList.add("mobile-visible");
+
+    }
+
+}
+
+
+function showMobileUsers() {
+
+    if (window.innerWidth <= 700) {
+
+        sidebar.classList.remove("mobile-hidden");
+
+        chatArea.classList.remove("mobile-visible");
+
+    }
+
+}
+
+
+if (chatList) {
+
+    chatList.addEventListener(
+        "click",
+        function () {
+
+            setTimeout(
+                showMobileChat,
+                50
+            );
+
+        }
+    );
+
+}
+
+
+if (backButton) {
+
+    backButton.addEventListener(
+        "click",
+        function () {
+
+            showMobileUsers();
+
+        }
+    );
+
+}
+
+
+window.addEventListener(
+    "resize",
+    function () {
+
+        if (window.innerWidth > 700) {
+
+            sidebar.classList.remove(
+                "mobile-hidden"
+            );
+
+            chatArea.classList.remove(
+                "mobile-visible"
+            );
+
+        }
+
+    }
+);
+
+</script>
 
 </body>
 
 </html>
+```
