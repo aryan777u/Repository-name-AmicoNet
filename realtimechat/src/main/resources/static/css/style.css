@@ -1,4 +1,3 @@
-```css
 /* =========================
    RESET
    ========================= */
@@ -9,11 +8,16 @@
     padding: 0;
 }
 
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background: #111;
     color: white;
-    height: 100vh;
     overflow: hidden;
 }
 
@@ -24,13 +28,14 @@ body {
 
 .auth-container {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     background: #f4f7fb;
+    padding: 20px;
 }
 
 
@@ -40,14 +45,15 @@ body {
 
 .auth-box {
     width: 400px;
+    max-width: 100%;
+
     padding: 40px;
 
     background: white;
 
     border-radius: 18px;
 
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 
     text-align: center;
 }
@@ -106,11 +112,9 @@ body {
 
 .auth-box input:focus {
     border-color: #1683ff;
-
     background: white;
 
-    box-shadow:
-        0 0 0 3px rgba(22, 131, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(22, 131, 255, 0.1);
 }
 
 .auth-box input::placeholder {
@@ -119,7 +123,7 @@ body {
 
 
 /* =========================
-   LOGIN BUTTON
+   BUTTON
    ========================= */
 
 .auth-box button {
@@ -142,7 +146,6 @@ body {
 
 .auth-box button:hover {
     background: #0d73e5;
-    transform: translateY(-1px);
 }
 
 
@@ -154,7 +157,6 @@ body {
 #message {
     margin-top: 15px;
     margin-bottom: 5px;
-
     font-size: 14px;
 }
 
@@ -165,19 +167,14 @@ body {
 
 .login-link {
     margin-top: 22px;
-
     color: #777;
-
     font-size: 15px;
 }
 
 .login-link a {
     color: #1683ff;
-
     font-weight: bold;
-
     text-decoration: none;
-
     margin-left: 4px;
 }
 
@@ -192,9 +189,13 @@ body {
 
 .chat-app {
     display: flex;
-    height: 100vh;
+
     width: 100%;
+    height: 100vh;
+
     background: #111;
+
+    overflow: hidden;
 }
 
 
@@ -213,6 +214,8 @@ body {
 
     display: flex;
     flex-direction: column;
+
+    overflow: hidden;
 }
 
 
@@ -222,6 +225,7 @@ body {
 
 .sidebar-header {
     height: 110px;
+    min-height: 110px;
 
     padding: 20px;
 
@@ -239,7 +243,7 @@ body {
 
 
 /* =========================
-   MY PROFILE
+   PROFILE
    ========================= */
 
 .profile-section {
@@ -286,6 +290,7 @@ body {
 
 .search-box {
     padding: 16px;
+    flex-shrink: 0;
 }
 
 .search-box input {
@@ -317,28 +322,12 @@ body {
 
 .chat-list {
     flex: 1;
+
+    width: 100%;
+
     overflow-y: auto;
+    overflow-x: hidden;
 }
-
-.chat-user {
-    display: flex;
-    align-items: center;
-
-    padding: 15px;
-
-    cursor: pointer;
-
-    border-bottom: 1px solid #292929;
-}
-
-.chat-user:hover {
-    background: #2d2d2d;
-}
-
-
-/* =========================
-   FIX USER LIST
-   ========================= */
 
 #chatList {
     width: 100%;
@@ -404,6 +393,8 @@ body {
     font-weight: bold;
 
     margin-right: 14px;
+
+    overflow: hidden;
 }
 
 
@@ -414,6 +405,8 @@ body {
 .chat-info {
     display: flex;
     flex-direction: column;
+
+    min-width: 0;
 }
 
 .chat-name {
@@ -428,7 +421,6 @@ body {
 
 .last-message {
     color: #aaa;
-
     font-size: 14px;
 }
 
@@ -438,13 +430,13 @@ body {
 
 
 /* =========================
-   ADD PERSON BUTTON
+   ADD PERSON
    ========================= */
 
 .add-user-btn {
     margin: 16px;
 
-    height: 56px;
+    min-height: 56px;
 
     border: none;
 
@@ -457,6 +449,8 @@ body {
     font-size: 18px;
 
     cursor: pointer;
+
+    flex-shrink: 0;
 }
 
 .add-user-btn:hover {
@@ -471,12 +465,16 @@ body {
 .chat-area {
     flex: 1;
 
+    min-width: 0;
+
     height: 100vh;
 
     display: flex;
     flex-direction: column;
 
     background: #111;
+
+    overflow: hidden;
 }
 
 
@@ -559,6 +557,8 @@ body {
     font-weight: bold;
 
     margin-right: 16px;
+
+    overflow: hidden;
 }
 
 
@@ -571,6 +571,8 @@ body {
     flex-direction: column;
 
     gap: 4px;
+
+    min-width: 0;
 }
 
 .chat-header-info h2 {
@@ -579,6 +581,10 @@ body {
     font-size: 24px;
 
     color: white;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .online-status {
@@ -601,9 +607,12 @@ body {
 .messages {
     flex: 1;
 
+    min-height: 0;
+
     padding: 30px;
 
     overflow-y: auto;
+    overflow-x: hidden;
 
     display: flex;
     flex-direction: column;
@@ -613,7 +622,7 @@ body {
 
 
 /* =========================
-   MESSAGE BUBBLES
+   MESSAGE
    ========================= */
 
 .message {
@@ -628,11 +637,12 @@ body {
     line-height: 1.4;
 
     word-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 
 /* =========================
-   RECEIVED MESSAGE
+   RECEIVED
    ========================= */
 
 .message.received {
@@ -647,7 +657,7 @@ body {
 
 
 /* =========================
-   SENT MESSAGE
+   SENT
    ========================= */
 
 .message.sent {
@@ -700,6 +710,8 @@ body {
 
 .message-input input {
     flex: 1;
+
+    min-width: 0;
 
     height: 58px;
 
@@ -780,34 +792,308 @@ body {
 }
 
 
-/* =========================
+/* =====================================================
    MOBILE
-   ========================= */
+   ===================================================== */
 
 @media (max-width: 700px) {
 
-    .auth-box {
-        width: calc(100% - 30px);
-
-        padding: 30px 25px;
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
     }
 
-    .sidebar {
-        width: 300px;
+    .chat-app {
+        width: 100%;
+        height: 100vh;
 
-        min-width: 300px;
+        display: flex;
+        overflow: hidden;
+    }
+
+    /* Sidebar becomes narrower */
+
+    .sidebar {
+        width: 280px;
+        min-width: 280px;
+
+        height: 100vh;
+    }
+
+    .sidebar-header {
+        height: 85px;
+        min-height: 85px;
+
+        padding: 14px;
+    }
+
+    .sidebar-header h1 {
+        font-size: 21px;
+    }
+
+    .profile-btn,
+    .profile-photo {
+        width: 44px;
+        height: 44px;
+    }
+
+    .search-box {
+        padding: 12px;
+    }
+
+    .search-box input {
+        height: 44px;
+
+        padding: 0 16px;
+
+        font-size: 14px;
+    }
+
+    #chatList > div {
+        min-height: 70px;
+
+        padding: 10px 12px;
+    }
+
+    #chatList .avatar,
+    .chat-user .avatar,
+    .chat-user img,
+    #chatList img {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+
+        margin-right: 10px;
+    }
+
+    .chat-name {
+        font-size: 15px;
+    }
+
+    .last-message {
+        font-size: 12px;
+    }
+
+    .add-user-btn {
+        margin: 12px;
+
+        min-height: 48px;
+
+        font-size: 15px;
+    }
+
+
+    /* CHAT */
+
+    .chat-area {
+        width: calc(100vw - 280px);
+        min-width: 0;
+
+        height: 100vh;
+    }
+
+    .chat-header {
+        height: 75px;
+        min-height: 75px;
+
+        padding: 10px 12px;
+    }
+
+    .chat-avatar-container {
+        width: 50px;
+        height: 50px;
+
+        min-width: 50px;
+
+        margin-right: 10px;
+    }
+
+    .chat-profile-photo,
+    .chat-header .chat-profile-photo,
+    .chat-header img {
+        width: 50px;
+        height: 50px;
+
+        min-width: 50px;
+    }
+
+    .chat-avatar-container .avatar,
+    .chat-header .avatar {
+        width: 50px;
+        height: 50px;
+
+        min-width: 50px;
+
+        font-size: 20px;
+
+        margin-right: 0;
     }
 
     .chat-header-info h2 {
-        font-size: 20px;
+        font-size: 18px;
+    }
+
+    .online-status {
+        font-size: 12px;
     }
 
     .messages {
-        padding: 18px;
+        padding: 15px 12px;
+
+        gap: 8px;
     }
 
     .message {
         max-width: 85%;
+
+        padding: 10px 14px;
+
+        font-size: 15px;
+    }
+
+    .message-input {
+        min-height: 70px;
+
+        padding: 10px 12px;
+
+        gap: 8px;
+    }
+
+    .message-input input {
+        height: 48px;
+
+        padding: 0 16px;
+
+        font-size: 15px;
+    }
+
+    .message-input button {
+        width: 48px;
+        height: 48px;
+
+        min-width: 48px;
+
+        font-size: 20px;
     }
 }
-```
+
+
+/* =====================================================
+   VERY SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 480px) {
+
+    .sidebar {
+        width: 220px;
+        min-width: 220px;
+    }
+
+    .chat-area {
+        width: calc(100vw - 220px);
+    }
+
+    .sidebar-header h1 {
+        font-size: 18px;
+    }
+
+    .profile-btn,
+    .profile-photo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .search-box {
+        padding: 8px;
+    }
+
+    #chatList > div {
+        padding: 8px;
+    }
+
+    #chatList .avatar,
+    .chat-user .avatar,
+    .chat-user img,
+    #chatList img {
+        width: 42px;
+        height: 42px;
+
+        min-width: 42px;
+
+        margin-right: 8px;
+    }
+
+    .chat-name {
+        font-size: 14px;
+    }
+
+    .last-message {
+        font-size: 11px;
+    }
+
+    .add-user-btn {
+        margin: 8px;
+
+        font-size: 13px;
+    }
+
+    .chat-header {
+        padding: 8px;
+    }
+
+    .chat-avatar-container {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+
+        margin-right: 8px;
+    }
+
+    .chat-profile-photo,
+    .chat-header .chat-profile-photo,
+    .chat-header img,
+    .chat-avatar-container .avatar,
+    .chat-header .avatar {
+        width: 44px;
+        height: 44px;
+
+        min-width: 44px;
+    }
+
+    .chat-header-info h2 {
+        font-size: 15px;
+    }
+
+    .online-status {
+        font-size: 11px;
+    }
+
+    .messages {
+        padding: 10px 8px;
+    }
+
+    .message {
+        max-width: 90%;
+
+        font-size: 14px;
+    }
+
+    .message-input {
+        padding: 8px;
+    }
+
+    .message-input input {
+        height: 44px;
+
+        font-size: 14px;
+    }
+
+    .message-input button {
+        width: 44px;
+        height: 44px;
+
+        min-width: 44px;
+    }
+}

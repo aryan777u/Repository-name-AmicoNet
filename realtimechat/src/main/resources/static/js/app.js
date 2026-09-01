@@ -1,888 +1,874 @@
-/* ======================================================
-   RESET
-====================================================== */
+```javascript
+// ======================================================
+// SIGN UP
+// ======================================================
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+const signupForm = document.getElementById("signupForm");
 
-html,
-body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
+if (signupForm) {
+    signupForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #111;
-    color: white;
-}
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const message = document.getElementById("message");
 
+        try {
+            const response = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password
+                })
+            });
 
-/* ======================================================
-   LOGIN / SIGNUP
-====================================================== */
+            const result = await response.text();
 
-.auth-container {
-    width: 100%;
-    min-height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background: #f4f7fb;
-}
-
-.auth-box {
-    width: 400px;
-    max-width: 100%;
-
-    padding: 40px;
-
-    background: white;
-
-    border-radius: 18px;
-
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-
-    text-align: center;
-}
-
-.auth-box h1 {
-    font-size: 34px;
-    color: #1683ff;
-    margin-bottom: 10px;
-}
-
-.auth-box > p {
-    color: #777;
-    font-size: 16px;
-    margin-bottom: 25px;
-}
-
-.auth-box form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.auth-box input {
-    width: 100%;
-    height: 52px;
-
-    padding: 0 16px;
-
-    border: 1px solid #d9e0e8;
-    border-radius: 10px;
-
-    outline: none;
-
-    background: #f8fafc;
-    color: #222;
-
-    font-size: 16px;
-}
-
-.auth-box input:focus {
-    border-color: #1683ff;
-
-    background: white;
-
-    box-shadow: 0 0 0 3px rgba(22, 131, 255, 0.1);
-}
-
-.auth-box button {
-    width: 100%;
-    height: 52px;
-
-    border: none;
-    border-radius: 10px;
-
-    background: #1683ff;
-    color: white;
-
-    font-size: 17px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.auth-box button:hover {
-    background: #0d73e5;
-}
-
-#loginMessage,
-#message {
-    margin-top: 15px;
-    margin-bottom: 5px;
-    font-size: 14px;
-}
-
-.login-link {
-    margin-top: 22px;
-    color: #777;
-    font-size: 15px;
-}
-
-.login-link a {
-    color: #1683ff;
-    font-weight: bold;
-    text-decoration: none;
+            if (response.ok) {
+                message.textContent = "Account created successfully!";
+                message.style.color = "#31a24c";
+                signupForm.reset();
+            } else {
+                message.textContent = result;
+                message.style.color = "#ff4d4d";
+            }
+        } catch (error) {
+            console.error(error);
+            message.textContent = "Could not connect to server.";
+            message.style.color = "#ff4d4d";
+        }
+    });
 }
 
 
-/* ======================================================
-   CHAT APP
-====================================================== */
+// ======================================================
+// LOGIN
+// ======================================================
 
-.chat-app {
-    width: 100%;
-    height: 100vh;
+const loginForm = document.getElementById("loginForm");
 
-    display: flex;
+if (loginForm) {
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    background: #111;
+        const username =
+            document.getElementById("loginUsername").value.trim();
 
-    overflow: hidden;
+        const password =
+            document.getElementById("loginPassword").value;
+
+        const message =
+            document.getElementById("loginMessage");
+
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            });
+
+            const result = await response.text();
+
+            if (response.ok) {
+                message.textContent = "Login successful!";
+                message.style.color = "#31a24c";
+
+                localStorage.setItem("username", username);
+
+                setTimeout(function () {
+                    window.location.href = "/chat.html";
+                }, 500);
+            } else {
+                message.textContent = result;
+                message.style.color = "#ff4d4d";
+            }
+        } catch (error) {
+            console.error(error);
+            message.textContent = "Could not connect to server.";
+            message.style.color = "#ff4d4d";
+        }
+    });
 }
 
 
-/* ======================================================
-   SIDEBAR
-====================================================== */
+// ======================================================
+// CHAT ELEMENTS
+// ======================================================
 
-.sidebar {
-    width: 370px;
-    min-width: 370px;
-    height: 100vh;
+const sendButton = document.getElementById("sendButton");
+const messageInput = document.getElementById("messageInput");
+const messagesContainer = document.getElementById("messages");
+const chatList = document.getElementById("chatList");
+const searchInput = document.getElementById("searchInput");
+const chatName = document.getElementById("chatName");
+const chatAvatar = document.getElementById("chatAvatar");
+const onlineStatus = document.getElementById("onlineStatus");
 
-    background: #202020;
 
-    border-right: 1px solid #333;
+// ======================================================
+// CHAT SYSTEM
+// ======================================================
 
-    display: flex;
-    flex-direction: column;
+if (
+    sendButton &&
+    messageInput &&
+    messagesContainer &&
+    chatList
+) {
 
-    overflow: hidden;
-}
+    console.log("Chat JavaScript loaded!");
 
+    const currentUser =
+        localStorage.getItem("username") || "anonymous";
 
-/* ======================================================
-   SIDEBAR HEADER
-====================================================== */
+    let receiver = null;
+    let users = [];
 
-.sidebar-header {
-    height: 90px;
-    min-height: 90px;
+    const onlineUsers = new Set();
 
-    padding: 15px 20px;
+    let stompClient = null;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 
-    border-bottom: 1px solid #333;
-}
+    // ==================================================
+    // CONNECT WEBSOCKET
+    // ==================================================
 
-.sidebar-header h1 {
-    color: #1683ff;
-    font-size: 25px;
-}
+    function connectWebSocket() {
 
+        console.log("Connecting to WebSocket...");
 
-/* ======================================================
-   PROFILE
-====================================================== */
+        stompClient = new StompJs.Client({
 
-.profile-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+            webSocketFactory: function () {
+                return new SockJS("/ws");
+            },
 
-.profile-photo {
-    width: 52px;
-    height: 52px;
+            debug: function (str) {
+                console.log("[STOMP]", str);
+            },
 
-    border-radius: 50%;
+            reconnectDelay: 5000
+        });
 
-    object-fit: cover;
 
-    border: 2px solid #444;
-}
+        stompClient.onConnect = function (frame) {
 
-.profile-btn {
-    width: 52px;
-    height: 52px;
+            console.log("WebSocket connected!", frame);
 
-    border: none;
-    border-radius: 50%;
 
-    background: transparent;
+            // ==================================================
+            // MESSAGE SUBSCRIPTION
+            // ==================================================
 
-    color: #1683ff;
+            stompClient.subscribe(
+                "/topic/messages",
+                function (message) {
 
-    font-size: 28px;
+                    try {
 
-    cursor: pointer;
-}
+                        const receivedMessage =
+                            JSON.parse(message.body);
 
+                        if (!receiver) {
+                            return;
+                        }
 
-/* ======================================================
-   SEARCH
-====================================================== */
+                        const belongsToCurrentChat =
+                            (
+                                receivedMessage.sender === currentUser &&
+                                receivedMessage.receiver === receiver
+                            ) ||
+                            (
+                                receivedMessage.sender === receiver &&
+                                receivedMessage.receiver === currentUser
+                            );
 
-.search-box {
-    padding: 15px;
-}
+                        if (belongsToCurrentChat) {
+                            displayMessage(receivedMessage);
+                        }
 
-.search-box input {
-    width: 100%;
-    height: 48px;
+                    } catch (error) {
+                        console.error(
+                            "Message parsing error:",
+                            error
+                        );
+                    }
+                }
+            );
 
-    border: none;
-    outline: none;
 
-    border-radius: 25px;
+            // ==================================================
+            // PRESENCE
+            // ==================================================
 
-    background: #3a3a3a;
+            stompClient.subscribe(
+                "/topic/presence",
+                function (message) {
 
-    color: white;
+                    try {
 
-    padding: 0 20px;
+                        const presence =
+                            JSON.parse(message.body);
 
-    font-size: 16px;
-}
+                        if (presence.status === "ONLINE") {
 
-.search-box input::placeholder {
-    color: #bbb;
-}
+                            onlineUsers.add(
+                                presence.username
+                            );
 
+                        } else if (
+                            presence.status === "OFFLINE"
+                        ) {
 
-/* ======================================================
-   CHAT LIST
-====================================================== */
+                            onlineUsers.delete(
+                                presence.username
+                            );
+                        }
 
-.chat-list {
-    flex: 1;
+                        updateOnlineStatus();
+                        renderUsers(users);
 
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+                    } catch (error) {
 
-#chatList {
-    width: 100%;
-}
+                        console.error(
+                            "Presence error:",
+                            error
+                        );
+                    }
+                }
+            );
 
-#chatList > div {
-    display: flex;
-    align-items: center;
 
-    width: 100%;
-    min-height: 82px;
+            sendPresence("ONLINE");
+        };
 
-    padding: 12px 16px;
 
-    cursor: pointer;
+        stompClient.onStompError = function (frame) {
+            console.error("STOMP error:", frame);
+        };
 
-    border-bottom: 1px solid #303030;
 
-    color: white;
-}
+        stompClient.onWebSocketError = function (error) {
+            console.error("WebSocket error:", error);
+        };
 
-#chatList > div:hover {
-    background: #2b2b2b;
-}
 
+        stompClient.onWebSocketClose = function () {
+            console.log("WebSocket disconnected.");
+        };
 
-/* ======================================================
-   AVATAR
-====================================================== */
 
-#chatList .avatar {
-    width: 56px;
-    height: 56px;
-
-    min-width: 56px;
-
-    border-radius: 50%;
-
-    background: #3b82f6;
-
-    color: white;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 22px;
-    font-weight: bold;
-
-    margin-right: 14px;
-
-    overflow: hidden;
-}
-
-#chatList .avatar img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-}
-
-
-/* ======================================================
-   USER INFO
-====================================================== */
-
-.chat-info {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-name {
-    color: white;
-
-    font-size: 17px;
-    font-weight: bold;
-
-    margin-bottom: 5px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.last-message {
-    color: #aaa;
-    font-size: 14px;
-}
-
-.last-message.online {
-    color: #22c55e;
-}
-
-
-/* ======================================================
-   ADD PERSON
-====================================================== */
-
-.add-user-btn {
-    margin: 15px;
-
-    height: 52px;
-    min-height: 52px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #3a3a3a;
-
-    color: white;
-
-    font-size: 17px;
-
-    cursor: pointer;
-}
-
-.add-user-btn:hover {
-    background: #4a4a4a;
-}
-
-
-/* ======================================================
-   CHAT AREA
-====================================================== */
-
-.chat-area {
-    flex: 1;
-
-    min-width: 0;
-
-    height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-
-    background: #111;
-
-    overflow: hidden;
-}
-
-
-/* ======================================================
-   CHAT HEADER
-====================================================== */
-
-.chat-header {
-    height: 92px;
-    min-height: 92px;
-
-    padding: 14px 22px;
-
-    display: flex;
-    align-items: center;
-
-    background: #202020;
-
-    border-bottom: 1px solid #333;
-}
-
-
-/* ======================================================
-   CHAT AVATAR
-====================================================== */
-
-.chat-avatar-container {
-    width: 64px;
-    height: 64px;
-
-    min-width: 64px;
-
-    border-radius: 50%;
-
-    overflow: hidden;
-
-    margin-right: 16px;
-}
-
-.chat-avatar-container .avatar {
-    width: 64px;
-    height: 64px;
-
-    border-radius: 50%;
-
-    background: #3b82f6;
-
-    color: white;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.chat-profile-photo {
-    width: 64px;
-    height: 64px;
-
-    border-radius: 50%;
-
-    object-fit: cover;
-}
-
-
-/* ======================================================
-   CHAT HEADER INFO
-====================================================== */
-
-.chat-header-info {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 4px;
-}
-
-.chat-header-info h2 {
-    margin: 0;
-
-    font-size: 24px;
-
-    color: white;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.online-status {
-    font-size: 15px;
-    color: #888;
-}
-
-.online-status.online {
-    color: #22c55e;
-}
-
-
-/* ======================================================
-   MESSAGES
-====================================================== */
-
-.messages {
-    flex: 1;
-
-    min-height: 0;
-
-    padding: 30px;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 12px;
-}
-
-
-/* ======================================================
-   MESSAGE
-====================================================== */
-
-.message {
-    max-width: 70%;
-
-    padding: 12px 18px;
-
-    border-radius: 20px;
-
-    font-size: 17px;
-
-    line-height: 1.4;
-
-    word-break: break-word;
-}
-
-.message.received {
-    align-self: flex-start;
-
-    background: #3b3b3b;
-
-    color: white;
-
-    border-bottom-left-radius: 5px;
-}
-
-.message.sent {
-    align-self: flex-end;
-
-    background: #1683ff;
-
-    color: white;
-
-    border-bottom-right-radius: 5px;
-}
-
-.message span {
-    font-size: 11px;
-
-    opacity: 0.7;
-
-    margin-left: 6px;
-}
-
-
-/* ======================================================
-   MESSAGE INPUT
-====================================================== */
-
-.message-input {
-    min-height: 90px;
-
-    padding: 18px 22px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    background: #202020;
-
-    border-top: 1px solid #333;
-}
-
-.message-input input {
-    flex: 1;
-
-    min-width: 0;
-
-    height: 58px;
-
-    border: none;
-
-    outline: none;
-
-    border-radius: 30px;
-
-    background: #3a3a3a;
-
-    color: white;
-
-    padding: 0 22px;
-
-    font-size: 18px;
-}
-
-.message-input input::placeholder {
-    color: #bbb;
-}
-
-.message-input button {
-    width: 58px;
-    height: 58px;
-
-    min-width: 58px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: #1683ff;
-
-    color: white;
-
-    font-size: 25px;
-
-    cursor: pointer;
-}
-
-.message-input button:disabled {
-    opacity: 0.5;
-
-    cursor: not-allowed;
-}
-
-
-/* ======================================================
-   SCROLLBAR
-====================================================== */
-
-::-webkit-scrollbar {
-    width: 7px;
-}
-
-::-webkit-scrollbar-track {
-    background: #171717;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 10px;
-}
-
-
-/* ======================================================
-   MOBILE
-====================================================== */
-
-@media (max-width: 700px) {
-
-    html,
-    body {
-        width: 100%;
-        height: 100%;
+        stompClient.activate();
     }
 
-    .chat-app {
-        width: 100vw;
-        height: 100dvh;
 
-        display: block;
+    // ======================================================
+    // SEND PRESENCE
+    // ======================================================
 
-        overflow: hidden;
+    function sendPresence(status) {
+
+        if (
+            !stompClient ||
+            !stompClient.connected
+        ) {
+            return;
+        }
+
+        stompClient.publish({
+
+            destination: "/app/presence",
+
+            body: JSON.stringify({
+                username: currentUser,
+                status: status
+            })
+        });
     }
 
-    /* Hide sidebar when chat is being viewed */
-    .sidebar {
-        width: 100%;
-        min-width: 0;
 
-        height: 100dvh;
+    // ======================================================
+    // UPDATE ONLINE STATUS
+    // ======================================================
 
-        border-right: none;
+    function updateOnlineStatus() {
+
+        if (!receiver) {
+
+            onlineStatus.textContent = "● Offline";
+
+            onlineStatus.classList.remove("online");
+
+            return;
+        }
+
+        if (onlineUsers.has(receiver)) {
+
+            onlineStatus.textContent = "● Online";
+
+            onlineStatus.classList.add("online");
+
+        } else {
+
+            onlineStatus.textContent = "● Offline";
+
+            onlineStatus.classList.remove("online");
+        }
     }
 
-    .sidebar-header {
-        height: 75px;
-        min-height: 75px;
 
-        padding: 12px 16px;
+    // ======================================================
+    // LOAD USERS
+    // ======================================================
+
+    async function loadUsers() {
+
+        try {
+
+            const response = await fetch("/api/users");
+
+            if (!response.ok) {
+
+                console.error(
+                    "Could not load users:",
+                    response.status
+                );
+
+                return;
+            }
+
+            users = await response.json();
+
+            console.log("Users loaded:", users);
+
+            renderUsers(users);
+
+        } catch (error) {
+
+            console.error(
+                "Error loading users:",
+                error
+            );
+        }
     }
 
-    .sidebar-header h1 {
-        font-size: 22px;
+
+    // ======================================================
+    // RENDER USERS
+    // ======================================================
+
+    function renderUsers(userList) {
+
+        chatList.innerHTML = "";
+
+        userList.forEach(function (user) {
+
+            if (user.username === currentUser) {
+                return;
+            }
+
+            const chatItem =
+                document.createElement("div");
+
+            chatItem.classList.add("chat-item");
+
+
+            // AVATAR
+
+            const avatar =
+                document.createElement("div");
+
+            avatar.classList.add("avatar");
+
+
+            if (user.profilePhoto) {
+
+                const image =
+                    document.createElement("img");
+
+                image.src = user.profilePhoto;
+                image.alt = user.username;
+
+                avatar.appendChild(image);
+
+            } else {
+
+                avatar.textContent =
+                    user.username
+                        .charAt(0)
+                        .toUpperCase();
+            }
+
+
+            // USER INFO
+
+            const chatInfo =
+                document.createElement("div");
+
+            chatInfo.classList.add("chat-info");
+
+
+            const chatUsername =
+                document.createElement("div");
+
+            chatUsername.classList.add("chat-name");
+
+            chatUsername.textContent =
+                user.username;
+
+
+            const lastMessage =
+                document.createElement("div");
+
+            lastMessage.classList.add("last-message");
+
+
+            if (onlineUsers.has(user.username)) {
+
+                lastMessage.textContent = "● Online";
+                lastMessage.classList.add("online");
+
+            } else {
+
+                lastMessage.textContent = "● Offline";
+            }
+
+
+            chatInfo.appendChild(chatUsername);
+            chatInfo.appendChild(lastMessage);
+
+            chatItem.appendChild(avatar);
+            chatItem.appendChild(chatInfo);
+
+
+            chatItem.addEventListener(
+                "click",
+                function () {
+                    selectUser(user);
+                }
+            );
+
+
+            chatList.appendChild(chatItem);
+        });
     }
 
-    .profile-photo,
-    .profile-btn {
-        width: 45px;
-        height: 45px;
+
+    // ======================================================
+    // SELECT USER
+    // ======================================================
+
+    function selectUser(user) {
+
+        receiver = user.username;
+
+        chatName.textContent = user.username;
+
+        chatAvatar.innerHTML = "";
+
+
+        if (user.profilePhoto) {
+
+            const image =
+                document.createElement("img");
+
+            image.src = user.profilePhoto;
+            image.alt = user.username;
+
+            chatAvatar.appendChild(image);
+
+        } else {
+
+            chatAvatar.textContent =
+                user.username
+                    .charAt(0)
+                    .toUpperCase();
+        }
+
+
+        updateOnlineStatus();
+
+        messageInput.disabled = false;
+        sendButton.disabled = false;
+
+        messageInput.focus();
+
+        loadMessages();
     }
 
-    .search-box {
-        padding: 10px 12px;
+
+    // ======================================================
+    // LOAD MESSAGES
+    // ======================================================
+
+    async function loadMessages() {
+
+        if (!receiver) {
+            return;
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/messages?user1=" +
+                    encodeURIComponent(currentUser) +
+                    "&user2=" +
+                    encodeURIComponent(receiver)
+                );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const messages =
+                await response.json();
+
+            messagesContainer.innerHTML = "";
+
+            messages.forEach(function (message) {
+                displayMessage(message);
+            });
+
+            messagesContainer.scrollTop =
+                messagesContainer.scrollHeight;
+
+        } catch (error) {
+
+            console.error(
+                "Error loading messages:",
+                error
+            );
+        }
     }
 
-    .search-box input {
-        height: 45px;
-        font-size: 15px;
+
+    // ======================================================
+    // SEND MESSAGE
+    // ======================================================
+
+    function sendMessage() {
+
+        const text =
+            messageInput.value.trim();
+
+        if (text === "") {
+            return;
+        }
+
+        if (!receiver) {
+            alert("Please select a person first.");
+            return;
+        }
+
+        if (
+            !stompClient ||
+            !stompClient.connected
+        ) {
+            alert("Chat server is not connected yet.");
+            return;
+        }
+
+        const message = {
+
+            sender: currentUser,
+
+            receiver: receiver,
+
+            content: text
+        };
+
+
+        stompClient.publish({
+
+            destination: "/app/chat",
+
+            body: JSON.stringify(message)
+        });
+
+
+        messageInput.value = "";
     }
 
-    #chatList > div {
-        min-height: 70px;
-        padding: 10px 14px;
+
+    sendButton.addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+    messageInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                sendMessage();
+            }
+        }
+    );
+
+
+    // ======================================================
+    // DISPLAY MESSAGE
+    // ======================================================
+
+    function displayMessage(message) {
+
+        const messageElement =
+            document.createElement("div");
+
+
+        if (message.sender === currentUser) {
+
+            messageElement.classList.add(
+                "message",
+                "sent"
+            );
+
+        } else {
+
+            messageElement.classList.add(
+                "message",
+                "received"
+            );
+        }
+
+
+        const time =
+            message.timestamp
+                ? new Date(
+                    message.timestamp
+                ).toLocaleTimeString(
+                    [],
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                )
+                : "Now";
+
+
+        messageElement.innerHTML =
+            escapeHtml(message.content) +
+            " <span>" +
+            time +
+            "</span>";
+
+
+        messagesContainer.appendChild(
+            messageElement
+        );
+
+
+        messagesContainer.scrollTop =
+            messagesContainer.scrollHeight;
     }
 
-    #chatList .avatar {
-        width: 48px;
-        height: 48px;
-        min-width: 48px;
 
-        margin-right: 12px;
+    // ======================================================
+    // SEARCH
+    // ======================================================
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                const searchText =
+                    searchInput.value
+                        .toLowerCase()
+                        .trim();
+
+
+                const filteredUsers =
+                    users.filter(function (user) {
+
+                        return user.username
+                            .toLowerCase()
+                            .includes(searchText);
+                    });
+
+
+                renderUsers(filteredUsers);
+            }
+        );
     }
 
-    .chat-name {
-        font-size: 16px;
+
+    // ======================================================
+    // SECURITY
+    // ======================================================
+
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent = text;
+
+        return div.innerHTML;
     }
 
-    .last-message {
-        font-size: 13px;
-    }
 
-    .add-user-btn {
-        margin: 10px 12px;
+    // ======================================================
+    // PAGE CLOSE
+    // ======================================================
 
-        height: 48px;
-        min-height: 48px;
+    window.addEventListener(
+        "beforeunload",
+        function () {
+            sendPresence("OFFLINE");
+        }
+    );
 
-        font-size: 16px;
-    }
 
-    /*
-       CHAT AREA
-       On mobile it fills the screen.
-    */
+    // ======================================================
+    // START
+    // ======================================================
 
-    .chat-area {
-        width: 100vw;
-        height: 100dvh;
+    connectWebSocket();
 
-        min-width: 0;
-    }
-
-    .chat-header {
-        height: 70px;
-        min-height: 70px;
-
-        padding: 10px 14px;
-    }
-
-    .chat-avatar-container {
-        width: 48px;
-        height: 48px;
-
-        min-width: 48px;
-
-        margin-right: 12px;
-    }
-
-    .chat-avatar-container .avatar {
-        width: 48px;
-        height: 48px;
-
-        font-size: 20px;
-    }
-
-    .chat-profile-photo {
-        width: 48px;
-        height: 48px;
-    }
-
-    .chat-header-info h2 {
-        font-size: 18px;
-    }
-
-    .online-status {
-        font-size: 13px;
-    }
-
-    .messages {
-        padding: 15px 12px;
-
-        gap: 9px;
-    }
-
-    .message {
-        max-width: 85%;
-
-        padding: 10px 14px;
-
-        font-size: 15px;
-    }
-
-    .message-input {
-        min-height: 70px;
-
-        padding: 10px 12px;
-
-        gap: 8px;
-    }
-
-    .message-input input {
-        height: 48px;
-
-        padding: 0 16px;
-
-        font-size: 16px;
-    }
-
-    .message-input button {
-        width: 48px;
-        height: 48px;
-
-        min-width: 48px;
-
-        font-size: 21px;
-    }
+    loadUsers();
 }
 
 
-/* ======================================================
-   VERY SMALL PHONES
-====================================================== */
+// ======================================================
+// PROFILE PHOTO
+// ======================================================
 
-@media (max-width: 400px) {
+const profilePhotoButton =
+    document.getElementById("profilePhotoButton");
 
-    .auth-container {
-        padding: 12px;
-    }
+const profilePhotoInput =
+    document.getElementById("profilePhotoInput");
 
-    .auth-box {
-        padding: 28px 20px;
+const profilePhoto =
+    document.getElementById("profilePhoto");
 
-        border-radius: 14px;
-    }
 
-    .auth-box h1 {
-        font-size: 30px;
-    }
+if (
+    profilePhotoButton &&
+    profilePhotoInput &&
+    profilePhoto
+) {
 
-    .auth-box input,
-    .auth-box button {
-        height: 48px;
-    }
+    profilePhotoButton.addEventListener(
+        "click",
+        function () {
+            profilePhotoInput.click();
+        }
+    );
 
-    .chat-header-info h2 {
-        font-size: 17px;
-    }
 
-    .message {
-        max-width: 90%;
-    }
+    profilePhotoInput.addEventListener(
+        "change",
+        async function () {
+
+            const file =
+                profilePhotoInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            if (!file.type.startsWith("image/")) {
+
+                alert("Please select an image.");
+
+                return;
+            }
+
+
+            const username =
+                localStorage.getItem("username");
+
+
+            if (!username) {
+
+                alert("Please login first.");
+
+                return;
+            }
+
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "username",
+                username
+            );
+
+            formData.append(
+                "file",
+                file
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/users/profile-photo",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    const error =
+                        await response.text();
+
+                    alert(error);
+
+                    return;
+                }
+
+
+                const imageData =
+                    await response.text();
+
+
+                profilePhoto.src =
+                    imageData;
+
+                profilePhoto.style.display =
+                    "block";
+
+                profilePhotoButton.style.display =
+                    "none";
+
+
+                alert("Profile photo updated!");
+
+                location.reload();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Could not upload profile photo."
+                );
+            }
+        }
+    );
 }
+```
